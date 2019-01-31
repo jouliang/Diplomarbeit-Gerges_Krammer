@@ -3,17 +3,13 @@
  */
 package app;
 
-import java.io.FileInputStream;
-import java.util.concurrent.ExecutionException;
+import java.util.ArrayList;
+import java.util.HashSet;
 
-import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
-import com.google.firebase.cloud.FirestoreClient;
-
+import dao.DAO_Group;
 import dao.DAO_User;
+import data.Group;
+import data.User;
 
 /**
  * @author Joulian This class is the web service
@@ -27,19 +23,36 @@ public class InstantMessangerWS {
 		// TODO Auto-generated method stub
 
 		try {
-			FileInputStream serviceAccount = new FileInputStream("./serviceAccountKey.json");
-
-			FirebaseOptions options = new FirebaseOptions.Builder()
-					.setCredentials(GoogleCredentials.fromStream(serviceAccount))
-					.setDatabaseUrl("https://daims-75874.firebaseio.com").build();
-
-			FirebaseApp.initializeApp(options);
-			Firestore db = FirestoreClient.getFirestore();
-
-			DAO_User dao = new DAO_User(db);
+			DAO_User dao = DAO_User.getDaoUser();
+			DAO_Group daoG = DAO_Group.getDaoGroup();
 			
-			dao.insertUser("joulian", "joulianPassword");
-			dao.getAllUsers();
+			ArrayList<String> groupUsers = new ArrayList<String>() {
+				{
+					add("User 1");
+					add("User 2");
+					add("Bearte");
+				}
+			};
+			daoG.insertGroup("MyGroupName", groupUsers);
+			Thread.sleep(2000);
+			HashSet<Group> allGroups = daoG.getAllGroups();
+			
+			System.out.println("Group");
+			for(Group g : allGroups) {
+				System.out.println(g.getGroupName());
+				for(String mName : g.getGroupMembers()) {
+					System.out.println(mName);
+				}
+			}
+			
+			System.out.println("User");
+			dao.insertUser("ga", "ga");
+			Thread.sleep(2000);
+			HashSet<User> allUsers = dao.getAllUsers();
+			
+			for(User u : allUsers) {
+				System.out.println(u.getUsername() + u.getPassword() + u.isInitialLogin() + "\n");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

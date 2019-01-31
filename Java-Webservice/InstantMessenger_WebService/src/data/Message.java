@@ -65,4 +65,47 @@ public class Message {
 	public void setSender(String sender) {
 		this.sender = sender;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((messageContent == null) ? 0 : messageContent.hashCode());
+		result = prime * result + ((receiver == null) ? 0 : receiver.hashCode());
+		result = prime * result + ((sender == null) ? 0 : sender.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Message other = (Message) obj;
+		if (messageContent == null) {
+			if (other.messageContent != null)
+				return false;
+		} else if (!messageContent.equals(other.messageContent))
+			return false;
+		if (receiver == null) {
+			if (other.receiver != null)
+				return false;
+		} else if (!receiver.equals(other.receiver))
+			return false;
+		if (sender == null) {
+			if (other.sender != null)
+				return false;
+		} else if (!sender.equals(other.sender))
+			return false;
+		return true;
+	}
 }
