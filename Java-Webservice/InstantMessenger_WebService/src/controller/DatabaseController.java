@@ -32,12 +32,13 @@ public class DatabaseController {
 	 */
 	private DatabaseController() throws IOException {
 		super();
-		FileInputStream serviceAccount = new FileInputStream("./serviceAccountKey.json");
-
+		
+		//FileInputStream serviceAccount = new FileInputStream("./serviceAccountKey.json");
+		FileInputStream serviceAccount = new FileInputStream("/home/pupil/eclipse-workspace/InstantMessenger_WebService/src/controller/serviceAccountKey.json");
 		FirebaseOptions options = new FirebaseOptions.Builder()
 				.setCredentials(GoogleCredentials.fromStream(serviceAccount))
 				.setDatabaseUrl("https://daims-75874.firebaseio.com").build();
-
+		//FirebaseApp.getInstance().delete();
 		FirebaseApp.initializeApp(options);
 		this.db = FirestoreClient.getFirestore();
 	}

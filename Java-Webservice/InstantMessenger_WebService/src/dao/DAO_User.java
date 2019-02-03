@@ -1,6 +1,4 @@
-/**
- * 
- */
+
 package dao;
 
 import java.io.IOException;
@@ -14,10 +12,6 @@ import com.google.cloud.firestore.QuerySnapshot;
 import controller.DatabaseController;
 import data.User;
 
-/**
- * @author Joulian 
- * This class is the dao for the users
- */
 public class DAO_User {
 	private final String INTIAL_LOGIN = "initialLogin";
 	private final String USERNAME = "username";
