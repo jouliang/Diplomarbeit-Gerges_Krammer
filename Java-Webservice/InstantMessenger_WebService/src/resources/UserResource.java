@@ -1,4 +1,4 @@
-package Resources;
+package resources;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +23,6 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.UriInfo;
 
 import controller.DatabaseController;
-import dao.DAO_Message;
 import dao.DAO_User;
 
 import java.text.ParseException;
@@ -43,10 +42,10 @@ import data.*;
 
 
 // maps the resource to the URL 
-@Path("/messages")
+@Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class MessageResource {
+public class UserResource {
 
 	
 	
@@ -55,7 +54,7 @@ public class MessageResource {
 	@Context
 	Request request;
 
-	// http://localhost:8080/InstantMessenger_WebService/rest/messages/company
+	// http://localhost:8080/InstantMessenger_WebService/rest/users/company
 	@GET
 	@Path("/company")
 	@Produces(MediaType.TEXT_PLAIN)
@@ -64,20 +63,20 @@ public class MessageResource {
 	}
 
 	@GET
-	@Path("/messages")
+	@Path("/users")
 	public Response getEntry() throws IOException, InterruptedException, ExecutionException {
-		HashSet<Message> allMsgs = new HashSet<Message>();
+		HashSet<User> allUsers = new HashSet<User>();
 		//allUsers.add(new User("name","sicher",true));
 		//allUsers.add(new User("name2","sicher^2",false));
 		
 		DatabaseController dbinstance = DatabaseController.getDbController();
-		DAO_Message dao = DAO_Message.getDaoMessage();
-		allMsgs = dao.getAllMessages();
-		return Response.ok(allMsgs, MediaType.APPLICATION_JSON).build();
+		DAO_User dao = DAO_User.getDaoUser();
+		allUsers = dao.getAllUsers();
+		return Response.ok(allUsers, MediaType.APPLICATION_JSON).build();
 	}
 	
 	@POST
-	@Path("/createmessage")
+	@Path("/createuser")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createEntry(JsonObject data) throws ParseException {
 		if (!data.containsKey("username") || !data.containsKey("password")) {

@@ -1,4 +1,4 @@
-package Resources;
+package resources;
 
 import java.io.IOException;
 import java.util.ArrayList;
