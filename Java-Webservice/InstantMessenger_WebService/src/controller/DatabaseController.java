@@ -34,7 +34,7 @@ public class DatabaseController {
 		super();
 		
 		//FileInputStream serviceAccount = new FileInputStream("./serviceAccountKey.json");
-		FileInputStream serviceAccount = new FileInputStream("/home/pupil/eclipse-workspace/InstantMessenger_WebService/src/controller/serviceAccountKey.json");
+		FileInputStream serviceAccount = new FileInputStream("/home/joulian/Desktop/Diplomarbeit-2018_19/Diplomarbeit-Gerges_Krammer/Java-Webservice/InstantMessenger_WebService/src/controller/serviceAccountKey.json");
 		FirebaseOptions options = new FirebaseOptions.Builder()
 				.setCredentials(GoogleCredentials.fromStream(serviceAccount))
 				.setDatabaseUrl("https://daims-75874.firebaseio.com").build();

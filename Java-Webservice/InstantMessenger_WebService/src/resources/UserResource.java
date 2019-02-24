@@ -65,13 +65,9 @@ public class UserResource {
 	@GET
 	@Path("/users")
 	public Response getEntry() throws IOException, InterruptedException, ExecutionException {
-		HashSet<User> allUsers = new HashSet<User>();
-		//allUsers.add(new User("name","sicher",true));
-		//allUsers.add(new User("name2","sicher^2",false));
-		
-		DatabaseController dbinstance = DatabaseController.getDbController();
 		DAO_User dao = DAO_User.getDaoUser();
-		allUsers = dao.getAllUsers();
+		HashSet<User> allUsers = dao.getAllUsers();
+		
 		return Response.ok(allUsers, MediaType.APPLICATION_JSON).build();
 	}
 	
