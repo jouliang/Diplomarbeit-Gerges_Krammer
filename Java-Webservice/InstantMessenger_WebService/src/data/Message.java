@@ -3,6 +3,8 @@
  */
 package data;
 
+import java.util.Date;
+
 /**
  * @author Joulian
  * This class represents a message object
@@ -11,17 +13,20 @@ public class Message {
 	private String messageContent = "";
 	private String receiver = "";
 	private String sender = "";
-	
+	private Date transmittedTime = null;
+
 	/**
 	 * @param messageContent
 	 * @param receiver
 	 * @param sender
+	 * @param transmittedTime
 	 */
-	public Message(String messageContent, String receiver, String sender) {
+	public Message(String messageContent, String receiver, String sender, Date transmittedTime) {
 		super();
 		this.messageContent = messageContent;
 		this.receiver = receiver;
 		this.sender = sender;
+		this.transmittedTime = transmittedTime;
 	}
 
 	/**
@@ -64,6 +69,14 @@ public class Message {
 	 */
 	public void setSender(String sender) {
 		this.sender = sender;
+	}
+
+	public Date getTransmittedTime() {
+		return transmittedTime;
+	}
+
+	public void setTransmittedTime(Date transmittedTime) {
+		this.transmittedTime = transmittedTime;
 	}
 
 	/* (non-Javadoc)

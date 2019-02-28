@@ -62,12 +62,43 @@ public class DAO_User {
 						user.getBoolean(this.INTIAL_LOGIN)));
 			}
 		} else {
-			System.out.println("Ther are no users existing");
+			System.out.println("There are no users existing");
 		}
 
 		return allUsers;
 	}
+	
+	/**
+	 * This method updates the username from an user collection
+	 * @param newUsername
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
+	 */
+	public void updateUsername(String oldUsername, String newUsername) throws InterruptedException, ExecutionException {
+		this.dbController.updateOneField(this.USER_COLLECTION, this.dbController.getIdOfDocument(this.USER_COLLECTION, oldUsername), this.USERNAME, newUsername);
+	}
+	
+	/**
+	 * This method updates the password from an user collection
+	 * @param username
+	 * @param newPassword
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
+	public void updatePassword(String username, String newPassword) throws InterruptedException, ExecutionException {
+		this.dbController.updateOneField(this.USER_COLLECTION, this.dbController.getIdOfDocument(this.USER_COLLECTION, username), this.PASSWORD, newPassword);
+	}
 
+	/**
+	 * This method deletes an user
+	 * @param username
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
+	public void deleteUser(String username) throws InterruptedException, ExecutionException {
+		this.dbController.deleteDocument(this.USER_COLLECTION, this.dbController.getIdOfDocument(this.USER_COLLECTION, username));
+	}
+	
 	/**
 	 * @return the daoUser
 	 * @throws IOException 

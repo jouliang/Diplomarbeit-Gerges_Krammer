@@ -73,7 +73,28 @@ public class DAO_Group {
 
 		return allGroups;
 	}
+	
+	/**
+	 * This method changes the name of a group
+	 * @param oldGroupname
+	 * @param newGroupname
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
+	public void updateGroupname(String oldGroupname, String newGroupname) throws InterruptedException, ExecutionException {
+		this.dbController.updateOneField(this.GROUP_COLLECTION, this.dbController.getIdOfDocument(this.GROUP_COLLECTION, oldGroupname), this.GROUP_NAME, newGroupname);
+	}
 
+	/**
+	 * This method deletes an group
+	 * @param groupname
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
+	public void deleteGroup(String groupname) throws InterruptedException, ExecutionException {
+		this.dbController.deleteDocument(this.GROUP_COLLECTION, this.dbController.getIdOfDocument(this.GROUP_COLLECTION, groupname));
+	}
+	
 	/**
 	 * @return the daoGroup
 	 * @throws IOException 

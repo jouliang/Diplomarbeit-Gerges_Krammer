@@ -5,6 +5,7 @@ package controller;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -13,6 +14,7 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.CollectionReference;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -66,6 +68,46 @@ public class DatabaseController {
 		QuerySnapshot allUsersFromFireStore = future.get();
 		
 		return allUsersFromFireStore;
+	}
+	
+	/**
+	 * This method updates one field in an document
+	 * @param collectionName
+	 * @param documentId
+	 * @param key
+	 * @param value
+	 */
+	public void updateOneField(String collectionName, String documentId, String key, String value) {
+		DocumentReference user = db.collection(collectionName).document(documentId);
+		user.update(key, value);
+	}
+	
+	public void deleteDocument(String collectionName, String documentName) {
+		db.collection(collectionName).document(documentName).delete();
+	}
+	
+	/**
+	 * This method returns the id of an document
+	 * @param collection
+	 * @param uniqueField
+	 * @return
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
+	public String getIdOfDocument(String collection, String uniqueField) throws InterruptedException, ExecutionException {
+		QuerySnapshot allUsersFromFireStore = dbController.getCollection(collection);
+		String userId = "";
+		
+		if(!allUsersFromFireStore.isEmpty()) {
+			for (QueryDocumentSnapshot user : allUsersFromFireStore) {
+				if(user.getString(collection).equals(uniqueField)) {
+					userId = user.getId();
+					break;
+				}
+			}
+		}
+		
+		return userId;
 	}
 	
 	/**
