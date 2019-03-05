@@ -1,0 +1,7 @@
+{
+  "name": "InstantMessenger_App",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
