@@ -12,6 +12,11 @@ import com.google.cloud.firestore.QuerySnapshot;
 import controller.DatabaseController;
 import data.User;
 
+/**
+ * 
+ * @author Joulian
+ * This class is the data acces object for the user
+ */
 public class DAO_User {
 	private final String INTIAL_LOGIN = "initialLogin";
 	private final String USERNAME = "username";

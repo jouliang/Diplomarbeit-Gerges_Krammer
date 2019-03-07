@@ -18,7 +18,7 @@ import data.Group;
 
 /**
  * @author Joulian
- * This is the dao for the Group collection
+ * This is the data acces object for the Group collection
  */
 public class DAO_Group {
 	private final String GROUP_NAME = "groupName";

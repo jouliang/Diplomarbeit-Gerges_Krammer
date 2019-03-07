@@ -13,6 +13,11 @@ import com.google.cloud.firestore.QuerySnapshot;
 import controller.DatabaseController;
 import data.Message;
 
+/**
+ * 
+ * @author Joulian
+ * This is the data acces object for the messages
+ */
 public class DAO_Message {
 	private final String MESSAGE_CONTENT = "messageContent";
 	private final String RECEIVER = "receiver";
@@ -54,7 +59,6 @@ public class DAO_Message {
 
 	/**
 	 * This method is getting all messages of the cloud fire store database
-	 * 
 	 * @return
 	 * @throws InterruptedException
 	 * @throws ExecutionException
