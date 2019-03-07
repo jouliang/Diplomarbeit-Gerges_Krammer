@@ -65,14 +65,12 @@ public class MessageResource {
 
 	@GET
 	@Path("/messages")
-	public Response getEntry() throws IOException, InterruptedException, ExecutionException {
+	public Response getEntry() throws IOException, InterruptedException, ExecutionException, ParseException {
 		HashSet<Message> allMsgs = new HashSet<Message>();
-		//allUsers.add(new User("name","sicher",true));
-		//allUsers.add(new User("name2","sicher^2",false));
 		
-		DatabaseController dbinstance = DatabaseController.getDbController();
 		DAO_Message dao = DAO_Message.getDaoMessage();
 		allMsgs = dao.getAllMessages();
+		
 		return Response.ok(allMsgs, MediaType.APPLICATION_JSON).build();
 	}
 	

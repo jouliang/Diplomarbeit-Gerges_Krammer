@@ -99,6 +99,21 @@ public class UserResource {
 					.entity("Creating User failed. " + e1.getMessage()).build();
 		}
 	}
-
-
+	
+	@GET
+	@Path("/usernames")
+	public Response getUsernames() throws IOException, InterruptedException, ExecutionException {
+		HashSet<User> allUsers = new HashSet<User>();
+		HashSet<String> usernames = new HashSet<String>(); 
+		
+		DatabaseController dbinstance = DatabaseController.getDbController();
+		DAO_User dao = DAO_User.getDaoUser();
+		allUsers = dao.getAllUsers();
+		
+		for(User u: allUsers) {
+			usernames.add(u.getUsername());
+		}
+		
+		return Response.ok(usernames, MediaType.APPLICATION_JSON).build();
+	}
 }

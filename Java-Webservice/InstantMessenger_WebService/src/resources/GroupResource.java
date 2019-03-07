@@ -2,6 +2,7 @@ package resources;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -77,31 +78,45 @@ public class GroupResource {
 		return Response.ok(allGroups, MediaType.APPLICATION_JSON).build();
 	}
 	
-	@POST
-	@Path("/createmessage")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createEntry(JsonObject data) throws ParseException {
-		if (!data.containsKey("SENDER") || !data.containsKey("SENDER")) {
-			return Response.status(Response.Status.BAD_REQUEST).entity("SENDER and SENDER required").build();
+	@GET
+	@Path("/groupsforuser/{uname}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public Response getEntriesForUser(@PathParam("uname") String uname) throws IOException, InterruptedException, ExecutionException, ParseException {
+		HashMap<String, ArrayList<Message>> res = new HashMap<String, ArrayList<Message>>();
+		DAO_User dao = DAO_User.getDaoUser();
+		HashSet<User> allUsers = dao.getAllUsers();
+		User theOne = null;
+		
+		for(User u: allUsers) {
+			if(u.getUsername().equals(uname)) {
+				theOne = u;
+			}
 		}
-
-		String uname = data.getString("username");
-		String pw = data.getString("password");
-		boolean ilogin = data.getBoolean("initialLogin");
-	
-
-		User u = new User(uname,pw,ilogin);
-
-		try {
-		//	User created = EntryDAOImpl.getInstance().createEntry(e);
-
-			//return Response.ok(created, MediaType.APPLICATION_JSON).build();
-			return Response.ok(u, MediaType.APPLICATION_JSON).build();
-		} catch (Exception e1) {
-			return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-					.entity("Creating User failed. " + e1.getMessage()).build();
+		
+		HashSet<Group> allGroups = new HashSet<Group>();
+		DatabaseController dbinstance = DatabaseController.getDbController();
+		DAO_Group daoU = DAO_Group.getDaoGroup();
+		allGroups = daoU.getAllGroups();
+		
+		
+		DAO_Message daoM = DAO_Message.getDaoMessage();
+		HashSet<Message> allMsgs = daoM.getAllMessages();
+		
+		//Gruppen durchsuchen
+		for(Group g: allGroups) {
+			//wenn der User in einer Gruppe vorkommt
+			if(g.getGroupMembers().contains(theOne.getUsername())){
+				ArrayList<Message> msgsforgroup = new ArrayList<Message>();
+				for(Message m: allMsgs) {
+					//Nachrichten, wo die gesuchte Gruppe Empfänger ist
+					if(m.getReceiver().equals(g.getGroupName())) {
+						msgsforgroup.add(m);
+					}
+				}
+				res.put(g.getGroupName(), msgsforgroup);
+			}
 		}
+		
+		return Response.ok(res, MediaType.APPLICATION_JSON).build();
 	}
-
-
 }
