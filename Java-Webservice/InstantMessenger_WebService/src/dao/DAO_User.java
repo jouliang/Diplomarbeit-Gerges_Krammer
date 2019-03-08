@@ -80,7 +80,7 @@ public class DAO_User {
 	 * @throws InterruptedException 
 	 */
 	public void updateUsername(String oldUsername, String newUsername) throws InterruptedException, ExecutionException {
-		this.dbController.updateOneField(this.USER_COLLECTION, this.dbController.getIdOfDocument(this.USER_COLLECTION, oldUsername), this.USERNAME, newUsername);
+		this.dbController.updateOneField(this.USER_COLLECTION, this.dbController.getIdOfDocument(this.USER_COLLECTION, this.USERNAME, oldUsername), this.USERNAME, newUsername);
 	}
 	
 	/**
@@ -91,7 +91,7 @@ public class DAO_User {
 	 * @throws ExecutionException
 	 */
 	public void updatePassword(String username, String newPassword) throws InterruptedException, ExecutionException {
-		this.dbController.updateOneField(this.USER_COLLECTION, this.dbController.getIdOfDocument(this.USER_COLLECTION, username), this.PASSWORD, newPassword);
+		this.dbController.updateOneField(this.USER_COLLECTION, this.dbController.getIdOfDocument(this.USER_COLLECTION, this.USERNAME, username), this.PASSWORD, newPassword);
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class DAO_User {
 	 * @throws ExecutionException
 	 */
 	public void deleteUser(String username) throws InterruptedException, ExecutionException {
-		this.dbController.deleteDocument(this.USER_COLLECTION, this.dbController.getIdOfDocument(this.USER_COLLECTION, username));
+		this.dbController.deleteDocument(this.USER_COLLECTION, this.dbController.getIdOfDocument(this.USER_COLLECTION, this.USERNAME, username));
 	}
 	
 	/**

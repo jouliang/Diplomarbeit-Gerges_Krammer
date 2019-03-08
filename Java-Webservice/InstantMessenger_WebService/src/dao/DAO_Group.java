@@ -82,7 +82,7 @@ public class DAO_Group {
 	 * @throws ExecutionException
 	 */
 	public void updateGroupname(String oldGroupname, String newGroupname) throws InterruptedException, ExecutionException {
-		this.dbController.updateOneField(this.GROUP_COLLECTION, this.dbController.getIdOfDocument(this.GROUP_COLLECTION, oldGroupname), this.GROUP_NAME, newGroupname);
+		this.dbController.updateOneField(this.GROUP_COLLECTION, this.dbController.getIdOfDocument(this.GROUP_COLLECTION, this.GROUP_NAME, oldGroupname), this.GROUP_NAME, newGroupname);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class DAO_Group {
 	 * @throws ExecutionException
 	 */
 	public void deleteGroup(String groupname) throws InterruptedException, ExecutionException {
-		this.dbController.deleteDocument(this.GROUP_COLLECTION, this.dbController.getIdOfDocument(this.GROUP_COLLECTION, groupname));
+		this.dbController.deleteDocument(this.GROUP_COLLECTION, this.dbController.getIdOfDocument(this.GROUP_COLLECTION, this.GROUP_NAME, groupname));
 	}
 	
 	/**

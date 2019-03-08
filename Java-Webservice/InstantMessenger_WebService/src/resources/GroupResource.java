@@ -1,47 +1,29 @@
 package resources;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
-import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Request;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import controller.DatabaseController;
 import dao.DAO_Group;
 import dao.DAO_Message;
 import dao.DAO_User;
-
-import java.text.ParseException;
-import java.util.List;
-
-import javax.json.JsonObject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import data.*;
+import data.Group;
+import data.Message;
+import data.User;
 
 
 // maps the resource to the URL 
@@ -69,17 +51,14 @@ public class GroupResource {
 	@Path("/groups")
 	public Response getEntry() throws IOException, InterruptedException, ExecutionException {
 		HashSet<Group> allGroups = new HashSet<Group>();
-		//allUsers.add(new User("name","sicher",true));
-		//allUsers.add(new User("name2","sicher^2",false));
 		
-		DatabaseController dbinstance = DatabaseController.getDbController();
 		DAO_Group dao = DAO_Group.getDaoGroup();
 		allGroups = dao.getAllGroups();
 		return Response.ok(allGroups, MediaType.APPLICATION_JSON).build();
 	}
 	
 	@GET
-	@Path("/groupsforuser/{uname}")
+	@Path("/gwithmforuser/{uname}")
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response getEntriesForUser(@PathParam("uname") String uname) throws IOException, InterruptedException, ExecutionException, ParseException {
 		HashMap<String, ArrayList<Message>> res = new HashMap<String, ArrayList<Message>>();
@@ -94,7 +73,6 @@ public class GroupResource {
 		}
 		
 		HashSet<Group> allGroups = new HashSet<Group>();
-		DatabaseController dbinstance = DatabaseController.getDbController();
 		DAO_Group daoU = DAO_Group.getDaoGroup();
 		allGroups = daoU.getAllGroups();
 		

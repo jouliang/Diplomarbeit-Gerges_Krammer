@@ -10,7 +10,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 
@@ -97,7 +96,7 @@ public class DAO_Message {
 	 * @throws ExecutionException
 	 */
 	public void deleteMessage(String time) throws InterruptedException, ExecutionException {
-		this.dbController.deleteDocument(this.MESSAGE_COLLECTION, this.dbController.getIdOfDocument(MESSAGE_COLLECTION, time));
+		this.dbController.deleteDocument(this.MESSAGE_COLLECTION, this.dbController.getIdOfDocument(MESSAGE_COLLECTION, this.TRANSMITTEDTIME,time));
 	}
 
 	/**

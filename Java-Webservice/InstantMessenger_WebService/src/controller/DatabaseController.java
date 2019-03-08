@@ -94,13 +94,13 @@ public class DatabaseController {
 	 * @throws InterruptedException
 	 * @throws ExecutionException
 	 */
-	public String getIdOfDocument(String collection, String uniqueField) throws InterruptedException, ExecutionException {
+	public String getIdOfDocument(String collection, String key, String uniqueField) throws InterruptedException, ExecutionException {
 		QuerySnapshot allUsersFromFireStore = dbController.getCollection(collection);
 		String userId = "";
 		
 		if(!allUsersFromFireStore.isEmpty()) {
 			for (QueryDocumentSnapshot user : allUsersFromFireStore) {
-				if(user.getString(collection).equals(uniqueField)) {
+				if(user.getString(key).equals(uniqueField)) {
 					userId = user.getId();
 					break;
 				}
