@@ -84,6 +84,37 @@ public class DAO_Group {
 	public void updateGroupname(String oldGroupname, String newGroupname) throws InterruptedException, ExecutionException {
 		this.dbController.updateOneField(this.GROUP_COLLECTION, this.dbController.getIdOfDocument(this.GROUP_COLLECTION, this.GROUP_NAME, oldGroupname), this.GROUP_NAME, newGroupname);
 	}
+	
+	/**
+	 * This method changes the members of a group
+	 * @param groupName
+	 * @param groupMembers
+	 * @param idOfUserInMembers
+	 * @param oldUser
+	 * @param newUser
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
+	public void updateGroupMember(String groupName, ArrayList<String> groupMembers, int idOfUserInMembers, String oldUser, String newUser) throws InterruptedException, ExecutionException {
+		ArrayList<String> oldUsernames = new ArrayList<String>(groupMembers);
+		groupMembers.set(idOfUserInMembers, newUser);
+		this.dbController.updateOneField(this.GROUP_COLLECTION, this.dbController.getIdOfDocument(this.GROUP_COLLECTION, this.GROUP_MEMBERS, oldUsernames), this.GROUP_MEMBERS, groupMembers);
+	}
+	
+	/**
+	 * This method deletes an groupmember
+	 * @param groupName
+	 * @param groupMembers
+	 * @param idOfUserInMembers
+	 * @param username
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
+	public void deleteGroupmember(String groupName, ArrayList<String> groupMembers, int idOfUserInMembers, String username) throws InterruptedException, ExecutionException {
+		ArrayList<String> oldMembers = new ArrayList<String>(groupMembers);
+		groupMembers.remove(idOfUserInMembers);
+		this.dbController.updateOneField(this.GROUP_COLLECTION, this.dbController.getIdOfDocument(this.GROUP_COLLECTION, this.GROUP_MEMBERS, oldMembers), this.GROUP_MEMBERS, groupMembers);
+	}
 
 	/**
 	 * This method deletes an group

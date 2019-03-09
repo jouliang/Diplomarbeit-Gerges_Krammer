@@ -26,7 +26,15 @@ public class InstantMessangerWS {
 		// TODO Auto-generated method stub
 
 		try {
-			DAO_Message daom = DAO_Message.getDaoMessage();
+			DAO_Group dao = DAO_Group.getDaoGroup();
+			
+			ArrayList<String> members = new ArrayList<String>();
+			members.add("Thomas");
+			members.add("krammerg");
+			int indexOfMemberInList = members.indexOf("Thomas");
+			dao.updateGroupMember("Testgruppe", members, indexOfMemberInList, "Thomas", "Bernd"); 
+			
+			//DAO_Message daom = DAO_Message.getDaoMessage();
 			// DAO_User dao = DAO_User.getDaoUser();
 
 			/*
@@ -46,16 +54,15 @@ public class InstantMessangerWS {
 
 			// HashSet<User> allUsers = dao.getAllUsers();
 
-			//daom.insertMessage("TestContent", "MyGroupname", "user", new Date());
-
-			HashSet<Message> allMessages = new HashSet<Message>();
-			allMessages = daom.getAllMessages();
-
-			Thread.sleep(2000);
-			for (Message m : allMessages) {
-				System.out.println(m.getSender() + " " + m.getReceiver() + " " + m.getMessageContent() + " "
-						+ m.getTransmittedTime() + "\n");
-			}
+			// daom.insertMessage("TestContent", "MyGroupname", "user", new Date());
+			/*
+			 * HashSet<Message> allMessages = new HashSet<Message>(); allMessages =
+			 * daom.getAllMessages();
+			 * 
+			 * Thread.sleep(2000); for (Message m : allMessages) {
+			 * System.out.println(m.getSender() + " " + m.getReceiver() + " " +
+			 * m.getMessageContent() + " " + m.getTransmittedTime() + "\n"); }
+			 */
 
 			/*
 			 * ArrayList<String> groupUsers = new ArrayList<String>() { { add("User 1");

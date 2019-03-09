@@ -77,7 +77,7 @@ public class DatabaseController {
 	 * @param key
 	 * @param value
 	 */
-	public void updateOneField(String collectionName, String documentId, String key, String value) {
+	public void updateOneField(String collectionName, String documentId, String key, Object value) {
 		DocumentReference user = db.collection(collectionName).document(documentId);
 		user.update(key, value);
 	}
@@ -94,20 +94,20 @@ public class DatabaseController {
 	 * @throws InterruptedException
 	 * @throws ExecutionException
 	 */
-	public String getIdOfDocument(String collection, String key, String uniqueField) throws InterruptedException, ExecutionException {
-		QuerySnapshot allUsersFromFireStore = dbController.getCollection(collection);
-		String userId = "";
+	public String getIdOfDocument(String collection, String key, Object uniqueField) throws InterruptedException, ExecutionException {
+		QuerySnapshot collectionFromFireStore = dbController.getCollection(collection);
+		String documentId = "";
 		
-		if(!allUsersFromFireStore.isEmpty()) {
-			for (QueryDocumentSnapshot user : allUsersFromFireStore) {
-				if(user.getString(key).equals(uniqueField)) {
-					userId = user.getId();
+		if(!collectionFromFireStore.isEmpty()) {
+			for (QueryDocumentSnapshot document : collectionFromFireStore) {
+				if(document.get(key).equals(uniqueField)) {
+					documentId = document.getId();
 					break;
 				}
 			}
 		}
 		
-		return userId;
+		return documentId;
 	}
 	
 	/**

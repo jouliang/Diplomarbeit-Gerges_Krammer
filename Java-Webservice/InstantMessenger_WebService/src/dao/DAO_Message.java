@@ -18,8 +18,7 @@ import data.Message;
 
 /**
  * 
- * @author Joulian
- * This is the data acces object for the messages
+ * @author Joulian This is the data acces object for the messages
  */
 public class DAO_Message {
 	private final String MESSAGE_CONTENT = "messageContent";
@@ -43,6 +42,7 @@ public class DAO_Message {
 
 	/**
 	 * This method is inserting a message to our cloud fire store database
+	 * 
 	 * @param messageContent
 	 * @param receiver
 	 * @param sender
@@ -52,9 +52,9 @@ public class DAO_Message {
 	 */
 	public void insertMessage(String messageContent, String receiver, String sender, Date transmittedTime)
 			throws InterruptedException, ExecutionException {
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");  
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		String strtransmittedTime = dateFormat.format(transmittedTime);
-		
+
 		Map<String, Object> message = new HashMap<>();
 		message.put(this.MESSAGE_CONTENT, messageContent);
 		message.put(this.RECEIVER, receiver);
@@ -65,10 +65,11 @@ public class DAO_Message {
 
 	/**
 	 * This method is getting all messages of the cloud fire store database
+	 * 
 	 * @return
 	 * @throws InterruptedException
 	 * @throws ExecutionException
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
 	public HashSet<Message> getAllMessages() throws InterruptedException, ExecutionException, ParseException {
 		QuerySnapshot allMessagesFromFireStore = dbController.getCollection(this.MESSAGE_COLLECTION);
@@ -76,9 +77,9 @@ public class DAO_Message {
 
 		if (!allMessagesFromFireStore.isEmpty()) {
 			for (QueryDocumentSnapshot message : allMessagesFromFireStore) {
-				
+
 				Date date = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(message.getString(TRANSMITTEDTIME));
-				//Object date = message.get(this.TRANSMITTEDTIME);
+				// Object date = message.get(this.TRANSMITTEDTIME);
 				allMessages.add(new Message(message.getString(this.MESSAGE_CONTENT), message.getString(this.RECEIVER),
 						message.getString(this.SENDER), date));
 			}
@@ -88,15 +89,53 @@ public class DAO_Message {
 
 		return allMessages;
 	}
-	
+
+	/**
+	 * This updates the sender of an message
+	 * @param oldUsername
+	 * @param newUsername
+	 * @param transmittedTime
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
+	public void updateMessageSender(String oldUsername, String newUsername, Date transmittedTime)
+			throws InterruptedException, ExecutionException {
+
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		String strtransmittedTime = dateFormat.format(transmittedTime);
+		this.dbController.updateOneField(this.MESSAGE_COLLECTION,
+				this.dbController.getIdOfDocument(this.MESSAGE_COLLECTION, this.TRANSMITTEDTIME, strtransmittedTime),
+				this.SENDER, newUsername);
+	}
+
+	/**
+	 * This updates the receiver of an receiver
+	 * @param oldUsername
+	 * @param newUsername
+	 * @param transmittedTime
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
+	public void updateMessageReceiver(String oldUsername, String newUsername, Date transmittedTime)
+			throws InterruptedException, ExecutionException {
+
+		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		String strtransmittedTime = dateFormat.format(transmittedTime);
+		this.dbController.updateOneField(this.MESSAGE_COLLECTION,
+				this.dbController.getIdOfDocument(this.MESSAGE_COLLECTION, this.TRANSMITTEDTIME, strtransmittedTime),
+				this.RECEIVER, newUsername);
+	}
+
 	/**
 	 * This method deletes a message
+	 * 
 	 * @param time
 	 * @throws InterruptedException
 	 * @throws ExecutionException
 	 */
 	public void deleteMessage(String time) throws InterruptedException, ExecutionException {
-		this.dbController.deleteDocument(this.MESSAGE_COLLECTION, this.dbController.getIdOfDocument(MESSAGE_COLLECTION, this.TRANSMITTEDTIME,time));
+		this.dbController.deleteDocument(this.MESSAGE_COLLECTION,
+				this.dbController.getIdOfDocument(MESSAGE_COLLECTION, this.TRANSMITTEDTIME, time));
 	}
 
 	/**
