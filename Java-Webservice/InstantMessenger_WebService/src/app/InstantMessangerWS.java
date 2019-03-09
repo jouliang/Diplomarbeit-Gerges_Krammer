@@ -27,17 +27,18 @@ public class InstantMessangerWS {
 
 		try {
 			DAO_Message daom = DAO_Message.getDaoMessage();
-			DAO_User dao = DAO_User.getDaoUser();
+			// DAO_User dao = DAO_User.getDaoUser();
 
-			dao.deleteUser("456");
-
-			HashSet<User> allUsers = dao.getAllUsers();
-
-			Thread.sleep(2000);
-
-			for (User u : allUsers) {
-				System.out.println(u.getUsername() + u.getPassword() + u.isInitialLogin() + "\n");
-			}
+			/*
+			 * dao.deleteUser("456");
+			 * 
+			 * HashSet<User> allUsers = dao.getAllUsers();
+			 * 
+			 * Thread.sleep(2000);
+			 * 
+			 * for (User u : allUsers) { System.out.println(u.getUsername() +
+			 * u.getPassword() + u.isInitialLogin() + "\n"); }
+			 */
 
 			// DAO_Group daoG = DAO_Group.getDaoGroup();
 
@@ -45,16 +46,16 @@ public class InstantMessangerWS {
 
 			// HashSet<User> allUsers = dao.getAllUsers();
 
-			// daom.insertMessage("TestContent", "MyGroupname", "user", new Date());
+			//daom.insertMessage("TestContent", "MyGroupname", "user", new Date());
 
-			/*
-			 * HashSet<Message> allMessages = new HashSet<Message>(); allMessages =
-			 * daom.getAllMessages();
-			 * 
-			 * Thread.sleep(2000); for (Message m : allMessages) {
-			 * System.out.println(m.getSender() + " " + m.getReceiver() + " " +
-			 * m.getMessageContent() + " " + m.getTransmittedTime() + "\n"); }
-			 */
+			HashSet<Message> allMessages = new HashSet<Message>();
+			allMessages = daom.getAllMessages();
+
+			Thread.sleep(2000);
+			for (Message m : allMessages) {
+				System.out.println(m.getSender() + " " + m.getReceiver() + " " + m.getMessageContent() + " "
+						+ m.getTransmittedTime() + "\n");
+			}
 
 			/*
 			 * ArrayList<String> groupUsers = new ArrayList<String>() { { add("User 1");
