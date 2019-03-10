@@ -10,18 +10,15 @@ package data;
 public class User {
 	private String username = "";
 	private String password = "";
-	private boolean initialLogin = false;
 	
 	/**
 	 * @param username
 	 * @param password
-	 * @param initialLogin
 	 */
-	public User(String username, String password, boolean initialLogin) {
+	public User(String username, String password) {
 		super();
 		this.username = username;
 		this.password = password;
-		this.initialLogin = initialLogin;
 	}
 
 	/**
@@ -52,20 +49,6 @@ public class User {
 		this.password = password;
 	}
 
-	/**
-	 * @return the initialLogin
-	 */
-	public boolean isInitialLogin() {
-		return initialLogin;
-	}
-
-	/**
-	 * @param initialLogin the initialLogin to set
-	 */
-	public void setInitialLogin(boolean initialLogin) {
-		this.initialLogin = initialLogin;
-	}
-
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -73,7 +56,6 @@ public class User {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (initialLogin ? 1231 : 1237);
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
@@ -84,33 +66,23 @@ public class User {
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) {
+		if (this == obj)
 			return true;
-		}
-		if (obj == null) {
+		if (obj == null)
 			return false;
-		}
-		if (!(obj instanceof User)) {
+		if (getClass() != obj.getClass())
 			return false;
-		}
 		User other = (User) obj;
-		if (initialLogin != other.initialLogin) {
-			return false;
-		}
 		if (password == null) {
-			if (other.password != null) {
+			if (other.password != null)
 				return false;
-			}
-		} else if (!password.equals(other.password)) {
+		} else if (!password.equals(other.password))
 			return false;
-		}
 		if (username == null) {
-			if (other.username != null) {
+			if (other.username != null)
 				return false;
-			}
-		} else if (!username.equals(other.username)) {
+		} else if (!username.equals(other.username))
 			return false;
-		}
 		return true;
 	}
 }

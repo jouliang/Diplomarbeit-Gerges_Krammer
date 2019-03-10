@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 
 import javax.json.JsonObject;
@@ -60,16 +61,50 @@ public class UserResource {
 	@POST
 	@Path("/createuser")
 	public Response createUser(JsonObject newUser) throws ParseException {
+		String username = newUser.getString("username");
+		boolean userNotExists = true;
 
 		try {
 			DAO_User dao = DAO_User.getDaoUser();
-			dao.insertUser(newUser.getString("username"), newUser.getString("password"));
+
+			userNotExists = isUserExists(username);
+
+			if (userNotExists) {
+				dao.insertUser(username, newUser.getString("password"));
+			}
 		} catch (InterruptedException | ExecutionException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return Response.ok(newUser, MediaType.APPLICATION_JSON).build();
+		return Response.ok(userNotExists, MediaType.APPLICATION_JSON).build();
+	}
+
+	/**
+	 * This method checks if a given user is already exists in the database
+	 * 
+	 * @param uName
+	 * @return
+	 */
+	public boolean isUserExists(String uName) {
+		boolean userNotExists = true;
+		DAO_User dao;
+		try {
+			dao = DAO_User.getDaoUser();
+			HashSet<User> allUsers = dao.getAllUsers();
+
+			for (User u : allUsers) {
+				if (u.getUsername().equals(uName)) {
+					userNotExists = false;
+					break;
+				}
+			}
+		} catch (IOException | InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return userNotExists;
 	}
 
 	@GET
@@ -144,19 +179,47 @@ public class UserResource {
 		return Response.ok(res, MediaType.APPLICATION_JSON).build();
 	}
 
+	public boolean isPasswordExisting(String username, String password) {
+		boolean isPasswordTrue = false;
+		try {
+			DAO_User dao = DAO_User.getDaoUser();
+			HashSet<User> allUsers = dao.getAllUsers();
+
+			for (User u : allUsers) {
+				if (u.getUsername().equals(username)) {
+					if (u.getPassword().equals(password)) {
+						isPasswordTrue = true;
+					}
+				}
+			}
+		} catch (IOException | InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return isPasswordTrue;
+	}
+
 	@POST
 	@Path("/updatepassword")
 	public Response updatePassword(JsonObject userWithNewPassword) {
 
+		String username = userWithNewPassword.getString("username");
+		String oldPassword = userWithNewPassword.getString("oldPassword");
+		boolean isPasswordTrue = false;
+
 		try {
 			DAO_User dao = DAO_User.getDaoUser();
-			dao.updatePassword(userWithNewPassword.getString("username"), userWithNewPassword.getString("password"));
+			isPasswordTrue = isPasswordExisting(username, oldPassword);
+			if (isPasswordTrue) {
+				dao.updatePassword(username, userWithNewPassword.getString("password"));
+			}
 		} catch (InterruptedException | ExecutionException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return Response.ok(userWithNewPassword, MediaType.APPLICATION_JSON).build();
+		return Response.ok(isPasswordTrue, MediaType.APPLICATION_JSON).build();
 	}
 
 	@POST
@@ -165,43 +228,48 @@ public class UserResource {
 
 		String oldUsername = userWithNewName.getString("oldUsername");
 		String newUsername = userWithNewName.getString("newUsername");
+		boolean userNotExists = true;
 
 		try {
 			DAO_User daoUser = DAO_User.getDaoUser();
 			DAO_Group daoGroup = DAO_Group.getDaoGroup();
 			DAO_Message daoMessage = DAO_Message.getDaoMessage();
 
-			HashSet<Group> allGroups = daoGroup.getAllGroups();
-			ArrayList<String> groupMembers = new ArrayList<>();
+			userNotExists = isUserExists(newUsername);
 
-			for (Group g : allGroups) {
-				groupMembers = g.getGroupMembers();
-				if (groupMembers.contains(oldUsername)) {
-					int indexOfMemberInList = groupMembers.indexOf(oldUsername);
-					daoGroup.updateGroupMember(g.getGroupName(), groupMembers, indexOfMemberInList, oldUsername,
-							newUsername);
+			if (userNotExists) {
+				HashSet<Group> allGroups = daoGroup.getAllGroups();
+				ArrayList<String> groupMembers = new ArrayList<>();
+
+				for (Group g : allGroups) {
+					groupMembers = g.getGroupMembers();
+					if (groupMembers.contains(oldUsername)) {
+						int indexOfMemberInList = groupMembers.indexOf(oldUsername);
+						daoGroup.updateGroupMember(g.getGroupName(), groupMembers, indexOfMemberInList, oldUsername,
+								newUsername);
+					}
 				}
+
+				HashSet<Message> allMessages = daoMessage.getAllMessages();
+
+				for (Message m : allMessages) {
+					if (m.getSender().equals(oldUsername)) {
+						daoMessage.updateMessageSender(oldUsername, newUsername, m.getTransmittedTime());
+					}
+
+					if (m.getReceiver().equals(oldUsername)) {
+						daoMessage.updateMessageReceiver(oldUsername, newUsername, m.getTransmittedTime());
+					}
+				}
+
+				daoUser.updateUsername(oldUsername, newUsername);
 			}
-
-			HashSet<Message> allMessages = daoMessage.getAllMessages();
-
-			for (Message m : allMessages) {
-				if (m.getSender().equals(oldUsername)) {
-					daoMessage.updateMessageSender(oldUsername, newUsername, m.getTransmittedTime());
-				}
-
-				if (m.getReceiver().equals(oldUsername)) {
-					daoMessage.updateMessageReceiver(oldUsername, newUsername, m.getTransmittedTime());
-				}
-			}
-
-			daoUser.updateUsername(oldUsername, newUsername);
 		} catch (InterruptedException | ExecutionException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return Response.ok(userWithNewName, MediaType.APPLICATION_JSON).build();
+		return Response.ok(userNotExists, MediaType.APPLICATION_JSON).build();
 	}
 
 	@DELETE
@@ -209,27 +277,33 @@ public class UserResource {
 	public Response deleteUser(JsonObject user) {
 
 		String username = user.getString("username");
-		
+		String password = user.getString("password");
+		boolean isPasswordTrue = false;
+
 		try {
 			DAO_User daoUser = DAO_User.getDaoUser();
 			DAO_Group daoGroup = DAO_Group.getDaoGroup();
-			
-			HashSet<Group> allGroups = daoGroup.getAllGroups();
-			
-			for(Group g : allGroups) {
-				ArrayList<String> members = g.getGroupMembers();
-				
-				if(members.contains(username)) {
-					int indexOfMemberInList = members.indexOf(username);
-					daoGroup.deleteGroupmember(g.getGroupName(), members, indexOfMemberInList, username);
+
+			isPasswordTrue = isPasswordExisting(username, password);
+
+			if (isPasswordTrue) {
+				HashSet<Group> allGroups = daoGroup.getAllGroups();
+
+				for (Group g : allGroups) {
+					ArrayList<String> members = g.getGroupMembers();
+
+					if (members.contains(username)) {
+						int indexOfMemberInList = members.indexOf(username);
+						daoGroup.deleteGroupmember(g.getGroupName(), members, indexOfMemberInList, username);
+					}
 				}
+
+				daoUser.deleteUser(username);
 			}
-			
-			daoUser.deleteUser(username);
 		} catch (InterruptedException | ExecutionException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return Response.ok(user, MediaType.APPLICATION_JSON).build();
+		return Response.ok(isPasswordTrue, MediaType.APPLICATION_JSON).build();
 	}
 }
