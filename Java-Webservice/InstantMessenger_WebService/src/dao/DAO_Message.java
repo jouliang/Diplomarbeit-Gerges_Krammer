@@ -17,8 +17,8 @@ import controller.DatabaseController;
 import data.Message;
 
 /**
- * 
- * @author Joulian This is the data acces object for the messages
+ * @author Joulian 
+ * This is the data acces object for the messages
  */
 public class DAO_Message {
 	private final String MESSAGE_CONTENT = "messageContent";

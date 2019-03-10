@@ -14,7 +14,8 @@ import data.User;
 
 /**
  * 
- * @author Joulian This class is the data acces object for the user
+ * @author Joulian 
+ * This class is the data acces object for the user
  */
 public class DAO_User {
 	private final String USERNAME = "username";

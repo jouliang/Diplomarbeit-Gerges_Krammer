@@ -1,12 +1,10 @@
 package resources;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.concurrent.ExecutionException;
 
 import javax.json.JsonObject;
@@ -29,8 +27,12 @@ import dao.DAO_User;
 import data.Group;
 import data.Message;
 import data.User;
-
-// maps the resource to the URL 
+ 
+/**
+ * 
+ * @author Krammer & Gerges
+ * This is the ressource for the users
+ */
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -41,23 +43,12 @@ public class UserResource {
 	@Context
 	Request request;
 
-	// http://localhost:8080/InstantMessenger_WebService/rest/users/company
-	@GET
-	@Path("/company")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String getCompany() {
-		return "works";
-	}
-
-	@GET
-	@Path("/users")
-	public Response getEntry() throws IOException, InterruptedException, ExecutionException {
-		DAO_User dao = DAO_User.getDaoUser();
-		HashSet<User> allUsers = dao.getAllUsers();
-
-		return Response.ok(allUsers, MediaType.APPLICATION_JSON).build();
-	}
-
+	/**
+	 * This method creates an user
+	 * @param newUser
+	 * @return
+	 * @throws ParseException
+	 */
 	@POST
 	@Path("/createuser")
 	public Response createUser(JsonObject newUser) throws ParseException {
@@ -73,40 +64,18 @@ public class UserResource {
 				dao.insertUser(username, newUser.getString("password"));
 			}
 		} catch (InterruptedException | ExecutionException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		return Response.ok(userNotExists, MediaType.APPLICATION_JSON).build();
 	}
-
+	
 	/**
-	 * This method checks if a given user is already exists in the database
-	 * 
-	 * @param uName
+	 * This method checks if an user is existing
+	 * @param accountname
+	 * @param password
 	 * @return
 	 */
-	public boolean isUserExists(String uName) {
-		boolean userNotExists = true;
-		DAO_User dao;
-		try {
-			dao = DAO_User.getDaoUser();
-			HashSet<User> allUsers = dao.getAllUsers();
-
-			for (User u : allUsers) {
-				if (u.getUsername().equals(uName)) {
-					userNotExists = false;
-					break;
-				}
-			}
-		} catch (IOException | InterruptedException | ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return userNotExists;
-	}
-
 	@GET
 	@Path("/loginuser/{accountname}/{password}")
 	public Response checkUserLogin(@PathParam("accountname") String accountname,
@@ -118,7 +87,6 @@ public class UserResource {
 			DAO_User dao = DAO_User.getDaoUser();
 			allUsers = dao.getAllUsers();
 		} catch (InterruptedException | ExecutionException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -131,6 +99,13 @@ public class UserResource {
 		return Response.ok(success, MediaType.APPLICATION_JSON).build();
 	}
 
+	/**
+	 * This method gets alls usernames
+	 * @return
+	 * @throws IOException
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
 	@GET
 	@Path("/usernames")
 	public Response getUsernames() throws IOException, InterruptedException, ExecutionException {
@@ -147,6 +122,14 @@ public class UserResource {
 		return Response.ok(usernames, MediaType.APPLICATION_JSON).build();
 	}
 
+	/**
+	 * This method returns all users with their messages
+	 * @return
+	 * @throws IOException
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 * @throws ParseException
+	 */
 	@GET
 	@Path("/usernameswmsgs")
 	public Response getUsernamesWithMessages()
@@ -165,7 +148,6 @@ public class UserResource {
 			usernames.add(u.getUsername());
 			ArrayList<Message> msgs = new ArrayList<Message>();
 			for (Message m : allMsgs) {
-				// Nachrichten, wo die gesuchte Gruppe Empfänger ist
 				if (m.getSender().equals(u.getUsername())) {
 					msgs.add(m);
 				}
@@ -179,27 +161,9 @@ public class UserResource {
 		return Response.ok(res, MediaType.APPLICATION_JSON).build();
 	}
 
-	public boolean isPasswordExisting(String username, String password) {
-		boolean isPasswordTrue = false;
-		try {
-			DAO_User dao = DAO_User.getDaoUser();
-			HashSet<User> allUsers = dao.getAllUsers();
-
-			for (User u : allUsers) {
-				if (u.getUsername().equals(username)) {
-					if (u.getPassword().equals(password)) {
-						isPasswordTrue = true;
-					}
-				}
-			}
-		} catch (IOException | InterruptedException | ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return isPasswordTrue;
-	}
-
+	/**
+	 * This method updates the password of an user
+	 */
 	@POST
 	@Path("/updatepassword")
 	public Response updatePassword(JsonObject userWithNewPassword) {
@@ -215,13 +179,18 @@ public class UserResource {
 				dao.updatePassword(username, userWithNewPassword.getString("password"));
 			}
 		} catch (InterruptedException | ExecutionException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		return Response.ok(isPasswordTrue, MediaType.APPLICATION_JSON).build();
 	}
 
+	/**
+	 * This method updates an username
+	 * @param userWithNewName
+	 * @return
+	 * @throws ParseException
+	 */
 	@POST
 	@Path("/updateusername")
 	public Response updateUsername(JsonObject userWithNewName) throws ParseException {
@@ -265,13 +234,17 @@ public class UserResource {
 				daoUser.updateUsername(oldUsername, newUsername);
 			}
 		} catch (InterruptedException | ExecutionException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		return Response.ok(userNotExists, MediaType.APPLICATION_JSON).build();
 	}
 
+	/**
+	 * This method deletes an user
+	 * @param user
+	 * @return
+	 */
 	@DELETE
 	@Path("/deleteuser")
 	public Response deleteUser(JsonObject user) {
@@ -301,9 +274,60 @@ public class UserResource {
 				daoUser.deleteUser(username);
 			}
 		} catch (InterruptedException | ExecutionException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return Response.ok(isPasswordTrue, MediaType.APPLICATION_JSON).build();
+	}
+	
+	/**
+	 * This method checks if a given user is already exists in the database
+	 * 
+	 * @param uName
+	 * @return
+	 */
+	public boolean isUserExists(String uName) {
+		boolean userNotExists = true;
+		DAO_User dao;
+		try {
+			dao = DAO_User.getDaoUser();
+			HashSet<User> allUsers = dao.getAllUsers();
+
+			for (User u : allUsers) {
+				if (u.getUsername().equals(uName)) {
+					userNotExists = false;
+					break;
+				}
+			}
+		} catch (IOException | InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+
+		return userNotExists;
+	}
+	
+	/**
+	 * This method checks if a given password is existing
+	 * @param username
+	 * @param password
+	 * @return
+	 */
+	public boolean isPasswordExisting(String username, String password) {
+		boolean isPasswordTrue = false;
+		try {
+			DAO_User dao = DAO_User.getDaoUser();
+			HashSet<User> allUsers = dao.getAllUsers();
+
+			for (User u : allUsers) {
+				if (u.getUsername().equals(username)) {
+					if (u.getPassword().equals(password)) {
+						isPasswordTrue = true;
+					}
+				}
+			}
+		} catch (IOException | InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+
+		return isPasswordTrue;
 	}
 }

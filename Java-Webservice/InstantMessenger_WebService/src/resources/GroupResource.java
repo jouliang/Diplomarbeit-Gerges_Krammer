@@ -21,7 +21,6 @@ import javax.ws.rs.core.Request;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-
 import dao.DAO_Group;
 import dao.DAO_Message;
 import dao.DAO_User;
@@ -29,7 +28,11 @@ import data.Group;
 import data.Message;
 import data.User;
 
-// maps the resource to the URL 
+/**
+ * 
+ * @author Krammer & Gerges
+ * Here are the routes for the GroupRessource
+ */
 @Path("/groups")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
@@ -40,14 +43,11 @@ public class GroupResource {
 	@Context
 	Request request;
 
-	// http://localhost:8080/InstantMessenger_WebService/rest/groups/company
-	@GET
-	@Path("/company")
-	@Produces(MediaType.TEXT_PLAIN)
-	public String getCompany() {
-		return "works";
-	}
-
+	/**
+	 * This method creates an group
+	 * @param newGroup
+	 * @return
+	 */
 	@POST
 	@Path("/creategroup")
 	public Response create(JsonObject newGroup) {
@@ -71,34 +71,26 @@ public class GroupResource {
 		return Response.ok(newGroup, MediaType.APPLICATION_JSON).build();
 	}
 
-	@GET
-	@Path("/groups")
-	public Response getGroups() throws IOException, InterruptedException, ExecutionException {
-		HashSet<Group> allGroups = new HashSet<Group>();
-
-		DAO_Group dao = DAO_Group.getDaoGroup();
-		allGroups = dao.getAllGroups();
-		return Response.ok(allGroups, MediaType.APPLICATION_JSON).build();
-	}
-
+	/**
+	 * This method gets all groups with their messages
+	 * @param uname
+	 * @return
+	 */
 	@GET
 	@Path("/gwithmforuser/{uname}")
 	@Produces(MediaType.TEXT_PLAIN)
 	public Response getGroupsWithMessagesForUser(@PathParam("uname") String uname) {
 		HashMap<String, ArrayList<Message>> res = new HashMap<String, ArrayList<Message>>();
-		
+
 		HashSet<User> allUsers = new HashSet<User>();
 		try {
 			DAO_User dao = DAO_User.getDaoUser();
 			allUsers = dao.getAllUsers();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		User theOne = null;
@@ -114,7 +106,6 @@ public class GroupResource {
 			DAO_Group daoU = DAO_Group.getDaoGroup();
 			allGroups = daoU.getAllGroups();
 		} catch (InterruptedException | ExecutionException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -123,17 +114,13 @@ public class GroupResource {
 			DAO_Message daoM = DAO_Message.getDaoMessage();
 			allMsgs = daoM.getAllMessages();
 		} catch (InterruptedException | ExecutionException | ParseException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		// Gruppen durchsuchen
 		for (Group g : allGroups) {
-			// wenn der User in einer Gruppe vorkommt
 			if (g.getGroupMembers().contains(theOne.getUsername())) {
 				ArrayList<Message> msgsforgroup = new ArrayList<Message>();
 				for (Message m : allMsgs) {
-					// Nachrichten, wo die gesuchte Gruppe Empfänger ist
 					if (m.getReceiver().equals(g.getGroupName())) {
 						msgsforgroup.add(m);
 					}
