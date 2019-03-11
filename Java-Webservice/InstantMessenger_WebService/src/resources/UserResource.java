@@ -51,7 +51,7 @@ public class UserResource {
 	 */
 	@POST
 	@Path("/createuser")
-	public Response createUser(JsonObject newUser) throws ParseException {
+	public Response createUser(JsonObject newUser) {
 		String username = newUser.getString("username");
 		boolean userNotExists = true;
 

@@ -30,8 +30,7 @@ import data.User;
 
 /**
  * 
- * @author Krammer & Gerges
- * Here are the routes for the GroupRessource
+ * @author Krammer & Gerges Here are the routes for the GroupRessource
  */
 @Path("/groups")
 @Produces(MediaType.APPLICATION_JSON)
@@ -45,12 +44,13 @@ public class GroupResource {
 
 	/**
 	 * This method creates an group
+	 * 
 	 * @param newGroup
 	 * @return
 	 */
 	@POST
 	@Path("/creategroup")
-	public Response create(JsonObject newGroup) {
+	public Response createGroup(JsonObject newGroup) {
 		ArrayList<String> members = new ArrayList<String>();
 		JsonArray jsonmember = newGroup.getJsonArray("groupMembers");
 		if (jsonmember != null) {
@@ -73,6 +73,7 @@ public class GroupResource {
 
 	/**
 	 * This method gets all groups with their messages
+	 * 
 	 * @param uname
 	 * @return
 	 */
@@ -83,50 +84,45 @@ public class GroupResource {
 		HashMap<String, ArrayList<Message>> res = new HashMap<String, ArrayList<Message>>();
 
 		HashSet<User> allUsers = new HashSet<User>();
-		try {
-			DAO_User dao = DAO_User.getDaoUser();
-			allUsers = dao.getAllUsers();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		User theOne = null;
 
-		for (User u : allUsers) {
-			if (u.getUsername().equals(uname)) {
-				theOne = u;
+		DAO_User daoU;
+
+		try {
+			daoU = DAO_User.getDaoUser();
+			allUsers = daoU.getAllUsers();
+
+			User theOne = null;
+
+			for (User u : allUsers) {
+				if (u.getUsername().equals(uname)) {
+					theOne = u;
+				}
 			}
-		}
 
-		HashSet<Group> allGroups = new HashSet<Group>();
-		try {
-			DAO_Group daoU = DAO_Group.getDaoGroup();
-			allGroups = daoU.getAllGroups();
-		} catch (InterruptedException | ExecutionException | IOException e) {
-			e.printStackTrace();
-		}
+			HashSet<Group> allGroups = new HashSet<Group>();
 
-		HashSet<Message> allMsgs = new HashSet<Message>();
-		try {
+			DAO_Group daoG = DAO_Group.getDaoGroup();
+			allGroups = daoG.getAllGroups();
+
+			HashSet<Message> allMsgs = new HashSet<Message>();
+
 			DAO_Message daoM = DAO_Message.getDaoMessage();
 			allMsgs = daoM.getAllMessages();
-		} catch (InterruptedException | ExecutionException | ParseException | IOException e) {
-			e.printStackTrace();
-		}
 
-		for (Group g : allGroups) {
-			if (g.getGroupMembers().contains(theOne.getUsername())) {
-				ArrayList<Message> msgsforgroup = new ArrayList<Message>();
-				for (Message m : allMsgs) {
-					if (m.getReceiver().equals(g.getGroupName())) {
-						msgsforgroup.add(m);
+			for (Group g : allGroups) {
+				if (g.getGroupMembers().contains(theOne.getUsername())) {
+					ArrayList<Message> msgsforgroup = new ArrayList<Message>();
+					for (Message m : allMsgs) {
+						if (m.getReceiver().equals(g.getGroupName())) {
+							msgsforgroup.add(m);
+						}
 					}
+					res.put(g.getGroupName(), msgsforgroup);
 				}
-				res.put(g.getGroupName(), msgsforgroup);
 			}
+		} catch (IOException | InterruptedException | ExecutionException | ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 
 		return Response.ok(res, MediaType.APPLICATION_JSON).build();

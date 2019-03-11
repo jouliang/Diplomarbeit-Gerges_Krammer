@@ -39,7 +39,7 @@ public class MessageResource {
 	 */
 	@POST
 	@Path("/createmessage")
-	public Response create(JsonObject newMessage) {
+	public Response createMessage(JsonObject newMessage) {
 
 		DAO_Message dao;
 
