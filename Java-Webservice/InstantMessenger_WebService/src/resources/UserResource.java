@@ -67,7 +67,7 @@ public class UserResource {
 			e.printStackTrace();
 		}
 
-		return Response.ok(userNotExists, MediaType.APPLICATION_JSON).build();
+		return Response.ok(userNotExists, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public class UserResource {
 			}
 		}
 
-		return Response.ok(success, MediaType.APPLICATION_JSON).build();
+		return Response.ok(success, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class UserResource {
 			usernames.add(u.getUsername());
 		}
 
-		return Response.ok(usernames, MediaType.APPLICATION_JSON).build();
+		return Response.ok(usernames, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
 	}
 
 	/**
@@ -158,7 +158,7 @@ public class UserResource {
 			res.put(u.getUsername(), msgs);
 		}
 
-		return Response.ok(res, MediaType.APPLICATION_JSON).build();
+		return Response.ok(res, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
 	}
 
 	/**
@@ -182,7 +182,7 @@ public class UserResource {
 			e.printStackTrace();
 		}
 
-		return Response.ok(isPasswordTrue, MediaType.APPLICATION_JSON).build();
+		return Response.ok(isPasswordTrue, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
 	}
 
 	/**
@@ -214,7 +214,7 @@ public class UserResource {
 					groupMembers = g.getGroupMembers();
 					if (groupMembers.contains(oldUsername)) {
 						int indexOfMemberInList = groupMembers.indexOf(oldUsername);
-						daoGroup.updateGroupMember(g.getGroupName(), groupMembers, indexOfMemberInList, oldUsername,
+						daoGroup.updateGroupMember(g.getGroupName(), groupMembers, indexOfMemberInList,
 								newUsername);
 					}
 				}
@@ -237,7 +237,7 @@ public class UserResource {
 			e.printStackTrace();
 		}
 
-		return Response.ok(userNotExists, MediaType.APPLICATION_JSON).build();
+		return Response.ok(userNotExists, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
 	}
 
 	/**
@@ -276,7 +276,7 @@ public class UserResource {
 		} catch (InterruptedException | ExecutionException | IOException e) {
 			e.printStackTrace();
 		}
-		return Response.ok(isPasswordTrue, MediaType.APPLICATION_JSON).build();
+		return Response.ok(isPasswordTrue, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
 	}
 	
 	/**

@@ -51,6 +51,6 @@ public class MessageResource {
 			e.printStackTrace();
 		}
 
-		return Response.ok(newMessage, MediaType.APPLICATION_JSON).build();
+		return Response.ok(newMessage, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
 	}
 }

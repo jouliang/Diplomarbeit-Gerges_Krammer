@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutionException;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -30,7 +31,8 @@ import data.User;
 
 /**
  * 
- * @author Krammer & Gerges Here are the routes for the GroupRessource
+ * @author Krammer & Gerges 
+ * Here are the routes for the GroupRessource
  */
 @Path("/groups")
 @Produces(MediaType.APPLICATION_JSON)
@@ -68,7 +70,79 @@ public class GroupResource {
 			throw new Error();
 		}
 
-		return Response.ok(newGroup, MediaType.APPLICATION_JSON).build();
+		return Response.ok(newGroup, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
+	}
+
+	/**
+	 * This method adds an user to a group
+	 * 
+	 * @param newMemberInGroup
+	 * @return
+	 */
+	@POST
+	@Path("/addusertogroup")
+	public Response addUserToGroup(JsonObject newMemberInGroup) {
+		boolean isUserExisting = true;
+		String groupName = newMemberInGroup.getString("groupName");
+		String newUser = newMemberInGroup.getString("username");
+
+		try {
+			DAO_Group dao = DAO_Group.getDaoGroup();
+
+			HashSet<Group> allGroups = dao.getAllGroups();
+			ArrayList<String> groupMembers = new ArrayList<String>();
+
+			for (Group g : allGroups) {
+				groupMembers = g.getGroupMembers();
+
+				if (!groupMembers.contains(newUser)) {
+					dao.addGroupMember(groupName, groupMembers, newUser);
+					isUserExisting = false;
+					break;
+				}
+			}
+		} catch (IOException | InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+
+		return Response.ok(isUserExisting, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
+	}
+
+	/**
+	 * This method deletes an user from a group
+	 * @param userInGroup
+	 * @return
+	 */
+	@DELETE
+	@Path("/removeuserfromgroup")
+	public Response removeUserFromGroup(JsonObject userInGroup) {
+		String groupName = userInGroup.getString("groupName");
+		String user = userInGroup.getString("username");
+		boolean isUserExisting = false;
+
+		try {
+			DAO_Group dao = DAO_Group.getDaoGroup();
+			HashSet<Group> allGroups = dao.getAllGroups();
+			ArrayList<String> members = new ArrayList<String>();
+
+			for (Group g : allGroups) {
+				if (g.getGroupName().equals(groupName)) {
+					members = g.getGroupMembers();
+					if (members.contains(user)) {
+						int id = members.indexOf(user);
+						dao.deleteGroupmember(groupName, members, id, user);
+						isUserExisting = true;
+					}
+					break;
+				}
+			}
+
+		} catch (IOException | InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return Response.ok(isUserExisting, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
 	}
 
 	/**
@@ -125,6 +199,6 @@ public class GroupResource {
 			e.printStackTrace();
 		}
 
-		return Response.ok(res, MediaType.APPLICATION_JSON).build();
+		return Response.ok(res, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
 	}
 }

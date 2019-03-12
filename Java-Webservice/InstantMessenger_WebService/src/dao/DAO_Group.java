@@ -95,9 +95,15 @@ public class DAO_Group {
 	 * @throws InterruptedException
 	 * @throws ExecutionException
 	 */
-	public void updateGroupMember(String groupName, ArrayList<String> groupMembers, int idOfUserInMembers, String oldUser, String newUser) throws InterruptedException, ExecutionException {
+	public void updateGroupMember(String groupName, ArrayList<String> groupMembers, int idOfUserInMembers, String newUser) throws InterruptedException, ExecutionException {
 		ArrayList<String> oldUsernames = new ArrayList<String>(groupMembers);
 		groupMembers.set(idOfUserInMembers, newUser);
+		this.dbController.updateOneField(this.GROUP_COLLECTION, this.dbController.getIdOfDocument(this.GROUP_COLLECTION, this.GROUP_MEMBERS, oldUsernames), this.GROUP_MEMBERS, groupMembers);
+	}
+	
+	public void addGroupMember(String groupName, ArrayList<String> groupMembers, String newUser) throws InterruptedException, ExecutionException {
+		ArrayList<String> oldUsernames = new ArrayList<String>(groupMembers);
+		groupMembers.add(newUser);
 		this.dbController.updateOneField(this.GROUP_COLLECTION, this.dbController.getIdOfDocument(this.GROUP_COLLECTION, this.GROUP_MEMBERS, oldUsernames), this.GROUP_MEMBERS, groupMembers);
 	}
 	
