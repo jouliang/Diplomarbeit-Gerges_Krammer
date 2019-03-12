@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MyNavService } from '../navService'; 
+import { MyNavService } from '../../providers/navService'; 
 
 @Component({
   selector: 'app-chat',
