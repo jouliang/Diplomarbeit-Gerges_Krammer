@@ -1,0 +1,12 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Username ändern</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-item>
+    <ion-input [(ngModel)]="username" placeholder="Username"></ion-input>
+  </ion-item>
+  <ion-button expand="block" (click)="navigateToHomePage()">Ändern</ion-button>
+</ion-content>

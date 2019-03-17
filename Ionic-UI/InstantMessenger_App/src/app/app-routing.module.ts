@@ -16,7 +16,11 @@ const routes: Routes = [
     loadChildren: './list/list.module#ListPageModule'
   },
   { path: 'chat', loadChildren: './chat/chat.module#ChatPageModule' },
-  { path: 'login', loadChildren: './login/login.module#LoginPageModule' }
+  { path: 'login', loadChildren: './login/login.module#LoginPageModule' },
+  { path: 'settings', loadChildren: './settings/settings.module#SettingsPageModule' },
+  { path: 'delete-account', loadChildren: './delete-account/delete-account.module#DeleteAccountPageModule' },
+  { path: 'update-username', loadChildren: './update-username/update-username.module#UpdateUsernamePageModule' },
+  { path: 'update-password', loadChildren: './update-password/update-password.module#UpdatePasswordPageModule' }
 ];
 
 @NgModule({

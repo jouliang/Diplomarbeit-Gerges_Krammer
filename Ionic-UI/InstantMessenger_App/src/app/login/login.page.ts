@@ -55,7 +55,7 @@ export class LoginPage implements OnInit {
   }
 
   async navigateToChatPage() {
-    this.myNavService.myParam = this.username;
+    this.myNavService.username = this.username;
     await this.navCtrl.navigateForward('/home');
   }
 }

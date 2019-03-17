@@ -16,7 +16,8 @@ export class HomePage {
   loggedUser: string;
 
   constructor(private http: HTTP, public navCtrl: NavController, private myNavService: MyNavService, public setup: MySetupProvider, public menuCtrl: MenuController) {
-    this.loggedUser = this.myNavService.myParam;
+    myNavService.allContacs.length = 0;
+    this.loggedUser = this.myNavService.username;
     this.getAllContacts();
   }
 
@@ -28,8 +29,13 @@ export class HomePage {
    * This function returns all contacts
    */
   private getAllContacts() {
+   
+    console.log(this.myNavService.allContacs);
+
     this.myNavService.getAllUsersWithMessages(this.http, this.setup.ip);
     this.myNavService.getAllGroupsWithMessage(this.http, this.setup.ip);
+
+    console.log(this.myNavService.allContacs)
 
     this.allContacts = Object.assign(this.myNavService.allContacs);
   }
