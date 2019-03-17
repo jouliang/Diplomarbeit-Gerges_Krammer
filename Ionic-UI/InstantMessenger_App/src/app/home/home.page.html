@@ -12,9 +12,9 @@
 <ion-content>
     <ion-searchbar placeholder="Search contact" (ionInput)="filterItems($event)"></ion-searchbar>
   <ion-list lines="none">
-    <ion-item *ngFor="let contact of allContacts" (click)="navigateToChatPage(contact.username)">
+    <ion-item *ngFor="let contact of allContacts" (click)="navigateToChatPage(contact)">
       <ion-icon slot="start" color="medium" name="chatboxes"></ion-icon>
-      <ion-label>{{contact.username}}</ion-label>
+      <ion-label>{{contact.name}}</ion-label>
     </ion-item>
   </ion-list>
 </ion-content>

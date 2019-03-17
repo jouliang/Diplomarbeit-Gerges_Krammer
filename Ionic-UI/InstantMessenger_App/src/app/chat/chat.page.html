@@ -5,5 +5,24 @@
 </ion-header>
 
 <ion-content padding>
-
+  <div class="main">
+    <div class="chat-box">
+      <div class="message-area">
+        <div class="message" *ngFor="let message of messages">
+          <div class="innerMessage" [class]="message.sender == loggedUser ? 'messageRight' : 'messageLeft'">
+            <p>{{message.sender}}<br>{{message.messageContent}}</p>
+          </div>
+          <br>
+        </div>
+      </div>
+      <div class="input-area">
+          <form name="messageForm" #messageForm="ngForm">
+              <ion-input type="text" name="message" id="message" [(ngModel)]="newMessage" placeholder="Say something nice..."></ion-input>
+              <button (click)="sendMessage()">
+                <ion-icon name="send"></ion-icon>
+              </button>
+            </form>
+      </div>
+    </div>
+  </div>
 </ion-content>

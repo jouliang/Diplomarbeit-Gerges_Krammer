@@ -3,7 +3,8 @@ import { NavController } from '@ionic/angular';
 import { MyNavService } from '../../providers/navService';
 import { MySetupProvider } from '../../providers/setup';
 import { HTTP } from "@ionic-native/http/ngx";
-import { User } from "../../commons/user";
+import { MenuController } from '@ionic/angular';
+import { groupBy } from 'rxjs/internal/operators/groupBy';
 
 @Component({
   selector: 'app-home',
@@ -12,44 +13,34 @@ import { User } from "../../commons/user";
 })
 export class HomePage {
   allContacts = [];
+  loggedUser: string;
 
-  constructor(private http: HTTP, public navCtrl: NavController, private myNavService : MyNavService, public setup : MySetupProvider) {
-    setup.ip = "192.168.195.58:8080";
+  constructor(private http: HTTP, public navCtrl: NavController, private myNavService: MyNavService, public setup: MySetupProvider, public menuCtrl: MenuController) {
+    this.loggedUser = this.myNavService.myParam;
     this.getAllContacts();
+  }
+
+  ionViewWillEnter() {
+    this.menuCtrl.enable(true);
   }
 
   /**
    * This function returns all contacts
    */
-  public getAllContacts(){
+  private getAllContacts() {
+    this.myNavService.getAllUsersWithMessages(this.http, this.setup.ip);
+    this.myNavService.getAllGroupsWithMessage(this.http, this.setup.ip);
 
-    this.http.get('http://' + this.setup.ip + '/InstantMessenger_WebService/rest/users/usernameswmsgs', {}, {})
-      .then(data => {
-        var usersWithMessages = JSON.parse(data.data);
-        var keysOfUsersWithMessages = Object.keys(usersWithMessages);
-        for (let key of keysOfUsersWithMessages) {
-          this.mapRawToUserWithMessages(key, usersWithMessages[key]).then(result => {
-            this.allContacts.push(result);
-          });
-        }
-      })
-      .catch(error => {
-        console.log("Error while getting user with messages: " + error.message); // error message as string
-      });
+    this.allContacts = Object.assign(this.myNavService.allContacs);
   }
 
-  private async mapRawToUserWithMessages(key : string, element: []) {
-    var currUserWithMessages: User;
-    
-    currUserWithMessages = new User(key, element);
-    console.log(currUserWithMessages);
-
-    return currUserWithMessages;
-  }
-
-  async navigateToChatPage(contactName : string) {
-    this.myNavService.myParam = contactName;
-    console.log(contactName);
+  /**
+   * This method navigates to chatpage
+   * @param contactName 
+   */
+  async navigateToChatPage(contact: {}) {
+    contact["loggedUser"] = this.loggedUser;
+    this.myNavService.myParam = contact;
     await this.navCtrl.navigateForward('/chat');
   }
 
@@ -60,9 +51,9 @@ export class HomePage {
 
     // if the value is an empty string don't filter the items
     if (val && val.trim() != '') {
-        this.allContacts = this.allContacts.filter((item) => {
-          return (item.username.toString().toLowerCase().indexOf(val.toLowerCase()) > -1);
-        })
-      }
+      this.allContacts = this.allContacts.filter((item) => {
+        return (item.name.toString().toLowerCase().indexOf(val.toLowerCase()) > -1);
+      })
+    }
   }
 }
