@@ -37,6 +37,7 @@ public class MessageResource {
 	 * @param newMessage
 	 * @return
 	 */
+	
 	@POST
 	@Path("/createmessage")
 	public Response createMessage(JsonObject newMessage) {
@@ -51,6 +52,8 @@ public class MessageResource {
 			e.printStackTrace();
 		}
 
-		return Response.ok(newMessage, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
+		return Response.ok(newMessage, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*")
+		.header("Access-Control-Allow-Headers", "Content-Type")
+		.header("Access-Control-Allow-Methods", "POST").build();
 	}
 }

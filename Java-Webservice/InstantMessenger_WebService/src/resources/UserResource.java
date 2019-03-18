@@ -11,6 +11,7 @@ import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -106,6 +107,7 @@ public class UserResource {
 	 * @throws InterruptedException
 	 * @throws ExecutionException
 	 */
+	
 	@GET
 	@Path("/usernames")
 	public Response getUsernames() throws IOException, InterruptedException, ExecutionException {
@@ -246,11 +248,10 @@ public class UserResource {
 	 * @return
 	 */
 	@DELETE
-	@Path("/deleteuser")
-	public Response deleteUser(JsonObject user) {
+	@Path("/deleteuser/{username}/{password}")
+	public Response deleteUser(@PathParam("username") String username,
+			@PathParam("password") String password) {
 
-		String username = user.getString("username");
-		String password = user.getString("password");
 		boolean isPasswordTrue = false;
 
 		try {

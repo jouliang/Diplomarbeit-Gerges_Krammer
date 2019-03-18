@@ -58,7 +58,7 @@ public class GroupResource {
 		if (jsonmember != null) {
 			int len = jsonmember.size();
 			for (int i = 0; i < len; i++) {
-				members.add(jsonmember.get(i).toString());
+				members.add(jsonmember.getString(i));
 			}
 		}
 
