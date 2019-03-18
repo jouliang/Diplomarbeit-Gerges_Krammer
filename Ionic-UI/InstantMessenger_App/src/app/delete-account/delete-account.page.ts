@@ -47,6 +47,10 @@ export class DeleteAccountPage implements OnInit {
     toast.present();
   }
 
+  async navigateToSettingsPage() {
+    await this.navCtrl.navigateBack('/settings');
+  }
+
   async navigateToLoginPage() {
     this.deleteAccount();
     await this.navCtrl.navigateForward('/login');

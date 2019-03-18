@@ -44,6 +44,10 @@ export class UpdateUsernamePage implements OnInit {
       });
   }
 
+  async navigateToSettingsPage() {
+    await this.navCtrl.navigateBack('/settings');
+  }
+
   async navigateToHomePage() {
     this.changeUsername();
     await this.navCtrl.navigateForward('/home');

@@ -1,5 +1,9 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button (click)="navigateToNewGroupUsernamesPage()"></ion-back-button>
+    </ion-buttons>
+
     <ion-title>Neue Gruppe</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -10,11 +14,11 @@
   </ion-item>
 
   <ion-list lines="none">
-      <ion-item class="users" *ngFor="let user of allUsers">
-        <ion-icon slot="start" color="medium" name="chatboxes"></ion-icon>
-        <ion-label>{{user.username}}</ion-label>
-      </ion-item>
-    </ion-list>
+    <ion-item class="users" *ngFor="let user of allUsers">
+      <ion-icon slot="start" color="medium" name="chatboxes"></ion-icon>
+      <ion-label>{{user.username}}</ion-label>
+    </ion-item>
+  </ion-list>
 
-    <ion-button expand="block" (click)="createGroup()">Gruppe erstellen</ion-button>
+  <ion-button expand="block" (click)="createGroup()">Gruppe erstellen</ion-button>
 </ion-content>

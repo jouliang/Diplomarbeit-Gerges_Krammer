@@ -18,7 +18,12 @@ export class AppComponent {
     {
       title: 'Neue Gruppe',
       url: '/new-group-usernames',
-      icon : 'people'
+      icon: 'people'
+    },
+    {
+      title: 'User zu Gruppe hinzufügen',
+      url: '/add-user-to-group',
+      icon: 'person-add'
     },
     {
       title: 'Einstellungen',
@@ -28,7 +33,7 @@ export class AppComponent {
     {
       title: 'Logout',
       url: '/login',
-      icon:'log-out'
+      icon: 'log-out'
     }
   ];
 

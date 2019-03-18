@@ -29,14 +29,8 @@ export class HomePage {
    * This function returns all contacts
    */
   private getAllContacts() {
-   
-    console.log(this.myNavService.allContacs);
-
     this.myNavService.getAllUsersWithMessages(this.http, this.setup.ip);
     this.myNavService.getAllGroupsWithMessage(this.http, this.setup.ip);
-
-    console.log(this.myNavService.allContacs)
-
     this.allContacts = Object.assign(this.myNavService.allContacs);
   }
 
@@ -60,6 +54,10 @@ export class HomePage {
       this.allContacts = this.allContacts.filter((item) => {
         return (item.name.toString().toLowerCase().indexOf(val.toLowerCase()) > -1);
       })
+    } else {
+      this.allContacts = [];
+      this.myNavService.allContacs = [];
+      this.getAllContacts();
     }
   }
 }

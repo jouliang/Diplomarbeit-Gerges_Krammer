@@ -12,6 +12,7 @@ import { ToastController } from '@ionic/angular';
 })
 export class NewGroupUsernamesPage implements OnInit {
   allUsers = [];
+  groups = [];
   loggedUser: string;
 
   constructor(private http: HTTP, public navCtrl: NavController,

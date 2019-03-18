@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>User zu Gruppe hinzufügen</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <h1>User</h1>
+  <ion-list lines="none">
+    <ion-item class="users" *ngFor="let user of allUsers" (click)="selectUser(user)">
+      <ion-icon slot="start" color="medium" name="chatboxes"></ion-icon>
+      <ion-label>{{user.username}} [{{user.isSelected}}]</ion-label>
+    </ion-item>
+  </ion-list>
+  <br>
+  <h1>Gruppen</h1>
+  <ion-list lines="none">
+    <ion-item class="groups" *ngFor="let group of allGroups" (click)="selectGroup(group)">
+      <ion-icon slot="start" color="medium" name="chatboxes"></ion-icon>
+      <ion-label>{{group.groupname}} [{{group.isSelected}}]</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" (click)="addUserToGroup()">Aktzeptieren</ion-button>
+</ion-content>

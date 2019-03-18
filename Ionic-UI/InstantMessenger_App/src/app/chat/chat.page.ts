@@ -61,7 +61,7 @@ export class ChatPage implements OnInit {
       latestMessages = this.myNavService.getAllGroupsWithMessage(this.http, this.setup.ip);
       latestMessages = this.getRightMessages(latestMessages);
     }
-    
+
     this.messages = Object.assign(latestMessages);
     console.log(true);
 
@@ -156,6 +156,10 @@ export class ChatPage implements OnInit {
     });
 
     return messageArray;
+  }
+
+  async navigateToHomePage() {
+    await this.navCtrl.navigateBack('/home');
   }
 
   async presentToast(message: string) {

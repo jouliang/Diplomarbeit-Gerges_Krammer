@@ -59,6 +59,10 @@ export class NewGroupPage implements OnInit {
     await this.navCtrl.navigateForward('/home');
   }
 
+  async navigateToNewGroupUsernamesPage() {
+    await this.navCtrl.navigateBack('/new-group-usernames');
+  }
+
   async presentToast(message: string) {
     const toast = await this.toastController.create({
       message: message,

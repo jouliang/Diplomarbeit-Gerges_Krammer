@@ -22,7 +22,8 @@ const routes: Routes = [
   { path: 'update-username', loadChildren: './update-username/update-username.module#UpdateUsernamePageModule' },
   { path: 'update-password', loadChildren: './update-password/update-password.module#UpdatePasswordPageModule' },
   { path: 'new-group-usernames', loadChildren: './new-group-usernames/new-group-usernames.module#NewGroupUsernamesPageModule' },
-  { path: 'new-group', loadChildren: './new-group/new-group.module#NewGroupPageModule' }
+  { path: 'new-group', loadChildren: './new-group/new-group.module#NewGroupPageModule' },
+  { path: 'add-user-to-group', loadChildren: './add-user-to-group/add-user-to-group.module#AddUserToGroupPageModule' }
 ];
 
 @NgModule({

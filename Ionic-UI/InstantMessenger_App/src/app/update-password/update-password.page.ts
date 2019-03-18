@@ -51,6 +51,10 @@ export class UpdatePasswordPage implements OnInit {
     }
   }
 
+  async navigateToSettingsPage() {
+    await this.navCtrl.navigateBack('/settings');
+  }
+
   async navigateToHomePage() {
     await this.navCtrl.navigateForward('/home');
   }
