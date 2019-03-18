@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Neue Gruppe</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-item>
+    <ion-input [(ngModel)]="groupName" placeholder="Gruppenname"></ion-input>
+  </ion-item>
+
+  <ion-list lines="none">
+      <ion-item class="users" *ngFor="let user of allUsers">
+        <ion-icon slot="start" color="medium" name="chatboxes"></ion-icon>
+        <ion-label>{{user.username}}</ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" (click)="createGroup()">Gruppe erstellen</ion-button>
+</ion-content>

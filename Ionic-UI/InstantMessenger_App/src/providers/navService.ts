@@ -12,7 +12,8 @@ export class MyNavService {
   private http: HTTP;
   public setup: MySetupProvider;
   myParam: any; // of course replace any with a nice interface of your own
-  username : string;
+  userNamesOfGroup = [];
+  username: string;
   /**
    * Gets all Users with their messages
    */
@@ -25,12 +26,14 @@ export class MyNavService {
         var usersWithMessages = JSON.parse(data.data);
         var keysOfUsersWithMessages = Object.keys(usersWithMessages);
         for (let key of keysOfUsersWithMessages) {
-          this.mapRawToUserWithMessages(key, usersWithMessages[key]).then(result => {
-            if (this.allContacs.includes(result) == false) {
-              this.allContacs.push(result);
-            }
-            usersWithMessagesArray.push(result);
-          });
+          if (key != this.username) {
+            this.mapRawToUserWithMessages(key, usersWithMessages[key]).then(result => {
+              if (this.allContacs.indexOf(result) == -1) {
+                this.allContacs.push(result);
+              }
+              usersWithMessagesArray.push(result);
+            });
+          }
         }
       })
       .catch(error => {
@@ -47,7 +50,7 @@ export class MyNavService {
     var groupsWithMessagesArray = [];
 
     this.http = myHTTP;
-    this.http.get('http://' + ip + '/InstantMessenger_WebService/rest/groups/gwithmforuser/koko', {}, {})
+    this.http.get('http://' + ip + '/InstantMessenger_WebService/rest/groups/gwithmforuser/' + this.username, {}, {})
       .then(data => {
         var groupsWithMessages = JSON.parse(data.data);
         var keysOfUsersWithMessages = Object.keys(groupsWithMessages);

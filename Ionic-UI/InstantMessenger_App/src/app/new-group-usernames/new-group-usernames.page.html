@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Neue Gruppe</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list lines="none">
+    <ion-item class="users" *ngFor="let user of allUsers" (click)="selectUser(user)">
+      <ion-icon slot="start" color="medium" name="chatboxes"></ion-icon>
+      <ion-label>{{user.username}} [{{user.isSelected}}]</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" (click)="navigateToNewGroupPage()">Aktzeptieren</ion-button>
+</ion-content>

@@ -20,7 +20,9 @@ const routes: Routes = [
   { path: 'settings', loadChildren: './settings/settings.module#SettingsPageModule' },
   { path: 'delete-account', loadChildren: './delete-account/delete-account.module#DeleteAccountPageModule' },
   { path: 'update-username', loadChildren: './update-username/update-username.module#UpdateUsernamePageModule' },
-  { path: 'update-password', loadChildren: './update-password/update-password.module#UpdatePasswordPageModule' }
+  { path: 'update-password', loadChildren: './update-password/update-password.module#UpdatePasswordPageModule' },
+  { path: 'new-group-usernames', loadChildren: './new-group-usernames/new-group-usernames.module#NewGroupUsernamesPageModule' },
+  { path: 'new-group', loadChildren: './new-group/new-group.module#NewGroupPageModule' }
 ];
 
 @NgModule({

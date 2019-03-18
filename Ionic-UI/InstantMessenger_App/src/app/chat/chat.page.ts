@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { NavController } from '@ionic/angular';
 import { MyNavService } from '../../providers/navService';
 import { HTTP } from "@ionic-native/http/ngx";
 import { MySetupProvider } from '../../providers/setup';
 import { ToastController } from '@ionic/angular';
 import { Message } from '../../commons/message';
 import { ChangeDetectorRef } from '@angular/core'
+import { NgZone } from '@angular/core';
+import { Events } from '@ionic/angular';
 
 @Component({
   selector: 'app-chat',
@@ -18,8 +21,9 @@ export class ChatPage implements OnInit {
   chatPartner: string;
   messages: any[];
 
-  constructor(private http: HTTP, private myNavService: MyNavService,
-    public setup: MySetupProvider, public toastController: ToastController,
+  constructor(public events: Events,
+    private zone: NgZone, private http: HTTP, private myNavService: MyNavService,
+    public setup: MySetupProvider, public navCtrl: NavController, public toastController: ToastController,
     private changeRef: ChangeDetectorRef) {
 
     this.messages = this.myNavService.myParam.messages;
@@ -28,13 +32,17 @@ export class ChatPage implements OnInit {
     this.loggedUser = this.myNavService.myParam.loggedUser
     this.messages = this.getMessagesWithLoggedUser(this.messages);
     this.messages = this.sortMessagesByDate(this.messages);
-    this.getLatestMessage();
-    var temp = this;
-    /*setInterval(function() {
-      alert("test");
-      this.messages = this.myNavService.myParam.messages;
-      temp.getMessagesWithLoggedUser();
-    }, 1000);*/
+
+    this.events.subscribe('updateScreen', () => {
+      this.zone.run(() => {
+        this.getLatestMessage();
+        console.log('force update the screen');
+      });
+    });
+    /* var temp = this;
+     setInterval(function() {
+       temp.navCtrl.navigateRoot("/chat");
+     })*/
   }
 
   ngOnInit() {
@@ -43,24 +51,23 @@ export class ChatPage implements OnInit {
 
   public getLatestMessage() {
     var latestMessages = [];
+    this.messages = [];
 
     if (this.identifier == "u") {
-      latestMessages = this.myNavService.getAllUsersWithMessages(this.http, this.setup.ip);
-      latestMessages = this.getRightMessages(latestMessages);
+      this.myNavService.getAllUsersWithMessages(this.http, this.setup.ip);
+      latestMessages = this.getRightMessages(this.myNavService.allContacs);
 
     } else {
       latestMessages = this.myNavService.getAllGroupsWithMessage(this.http, this.setup.ip);
       latestMessages = this.getRightMessages(latestMessages);
     }
+    
+    this.messages = Object.assign(latestMessages);
+    console.log(true);
 
-    if (JSON.stringify(latestMessages) != JSON.stringify(this.messages)) {
-      this.messages = [];
-      this.messages = Object.assign(latestMessages); 
-      console.log(true);
-    }
   }
 
-  public getRightMessages(messages : any[]) {
+  public getRightMessages(messages: any[]) {
     var temp = this;
 
     messages = messages.filter(function (element, index, array) {
@@ -98,13 +105,16 @@ export class ChatPage implements OnInit {
     this.http.post('http://' + this.setup.ip + '/InstantMessenger_WebService/rest/messages/createmessage', body,
       { "Content-Type": "application/json" })
       .then(data => {
+
         this.messages.push(data.data);
-        this.changeRef.detectChanges();
+        //this.changeRef.detectChanges();
         console.log('Received after sending message: ' + data.data);
       }).catch(error => {
         console.log("Error while creating new message from server - message: " + error.Message);
         this.presentToast("Beim Senden der Nachricht ist ein Fehler aufgetreten");
       });
+
+    this.events.publish('updateScreen');
   }
 
   /**

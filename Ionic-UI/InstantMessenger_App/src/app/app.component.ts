@@ -16,9 +16,19 @@ export class AppComponent {
       icon: 'home'
     },
     {
+      title: 'Neue Gruppe',
+      url: '/new-group-usernames',
+      icon : 'people'
+    },
+    {
       title: 'Einstellungen',
       url: '/settings',
       icon: 'settings'
+    },
+    {
+      title: 'Logout',
+      url: '/login',
+      icon:'log-out'
     }
   ];
 

@@ -18,7 +18,7 @@ export class LoginPage implements OnInit {
   constructor(private http: HTTP, public navCtrl: NavController,
     public setup: MySetupProvider, public menuCtrl: MenuController,
     private myNavService: MyNavService, public toastController: ToastController) {
-      setup.ip = "10.0.0.2:8080";
+    setup.ip = "10.0.0.2:8080";
   }
 
   ionViewWillEnter() {
@@ -46,7 +46,27 @@ export class LoginPage implements OnInit {
       });
   }
 
-  async presentToast(message : string) {
+  public register() {
+    let body =
+    {
+      "username": this.username,
+      "password": this.password
+    }
+
+    this.http.setDataSerializer('json');
+
+    this.http.post('http://' + this.setup.ip + '/InstantMessenger_WebService/rest/users/createuser', body,
+      { "Content-Type": "application/json" })
+      .then(data => {
+        this.presentToast("User wurde erstellt");
+        console.log('Received after creating new user: ' + data.data);
+      }).catch(error => {
+        console.log("Error while creating new user from server - message: " + error.Message);
+        this.presentToast("Beim Erstellen des Users ist ein Fehler aufgetreten");
+      });
+  }
+
+  async presentToast(message: string) {
     const toast = await this.toastController.create({
       message: message,
       duration: 2000
