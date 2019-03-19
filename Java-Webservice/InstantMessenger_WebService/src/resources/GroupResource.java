@@ -31,8 +31,7 @@ import data.User;
 
 /**
  * 
- * @author Krammer & Gerges 
- * Here are the routes for the GroupRessource
+ * @author Krammer & Gerges Here are the routes for the GroupRessource
  */
 @Path("/groups")
 @Produces(MediaType.APPLICATION_JSON)
@@ -105,19 +104,47 @@ public class GroupResource {
 			e.printStackTrace();
 		}
 
-		return Response.ok(isUserExisting, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
+		return Response.ok(isUserExisting, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*")
+				.build();
+	}
+
+	/**
+	 * This method returns all users from a group
+	 * @param groupName
+	 * @return
+	 */
+	@GET
+	@Path("/getusersfromgroup/{groupname}")
+	public Response getUsersFromGroup(@PathParam("groupname") String groupName) {
+		ArrayList<String> groupMembers = new ArrayList<String>();
+		try {
+			DAO_Group dao = DAO_Group.getDaoGroup();
+
+			HashSet<Group> allGroups = dao.getAllGroups();
+
+			for (Group g : allGroups) {
+
+				if (g.getGroupName().equals(groupName)) {
+					groupMembers = g.getGroupMembers();
+					break;
+				}
+			}
+		} catch (IOException | InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+
+		return Response.ok(groupMembers, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
 	}
 
 	/**
 	 * This method deletes an user from a group
+	 * 
 	 * @param userInGroup
 	 * @return
 	 */
 	@DELETE
-	@Path("/removeuserfromgroup")
-	public Response removeUserFromGroup(JsonObject userInGroup) {
-		String groupName = userInGroup.getString("groupName");
-		String user = userInGroup.getString("username");
+	@Path("/removeuserfromgroup/{groupname}/{username}")
+	public Response removeUserFromGroup(@PathParam("groupname") String groupName, @PathParam("username") String user) {
 		boolean isUserExisting = false;
 
 		try {
@@ -142,7 +169,8 @@ public class GroupResource {
 			e.printStackTrace();
 		}
 
-		return Response.ok(isUserExisting, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
+		return Response.ok(isUserExisting, MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*")
+				.build();
 	}
 
 	/**
