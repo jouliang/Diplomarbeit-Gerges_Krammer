@@ -26,6 +26,11 @@ export class AppComponent {
       icon: 'person-add'
     },
     {
+      title: 'User aus Gruppe löschen',
+      url: '/remove-user-from-group',
+      icon: 'trash'
+    },
+    {
       title: 'Einstellungen',
       url: '/settings',
       icon: 'settings'

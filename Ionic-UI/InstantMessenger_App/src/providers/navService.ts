@@ -13,6 +13,7 @@ export class MyNavService {
   public setup: MySetupProvider;
   myParam: any; // of course replace any with a nice interface of your own
   userNamesOfGroup = [];
+  selectedGroupToDeleteUser : string;
   username: string;
   /**
    * Gets all Users with their messages

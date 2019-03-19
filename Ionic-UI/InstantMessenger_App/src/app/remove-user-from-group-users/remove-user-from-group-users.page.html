@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>User aus Gruppe löschen</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <h1>User</h1>
+  <ion-list lines="none">
+    <ion-item class="users" *ngFor="let user of allUsers" (click)="selectUser(user)">
+      <ion-icon slot="start" color="medium" name="chatboxes"></ion-icon>
+      <ion-label>{{user.username}} [{{user.isSelected}}]</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-button expand="block" (click)="removeUserFromGroup()">Aktzeptieren</ion-button>
+</ion-content>

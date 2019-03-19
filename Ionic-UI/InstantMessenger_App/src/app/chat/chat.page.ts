@@ -36,6 +36,7 @@ export class ChatPage implements OnInit {
     this.events.subscribe('updateScreen', () => {
       this.zone.run(() => {
         this.getLatestMessage();
+        //window.location.reload(true);
         console.log('force update the screen');
       });
     });
@@ -58,12 +59,12 @@ export class ChatPage implements OnInit {
       latestMessages = this.getRightMessages(this.myNavService.allContacs);
 
     } else {
-      latestMessages = this.myNavService.getAllGroupsWithMessage(this.http, this.setup.ip);
-      latestMessages = this.getRightMessages(latestMessages);
+      this.myNavService.getAllGroupsWithMessage(this.http, this.setup.ip);
+      latestMessages = this.getRightMessages(this.myNavService.allContacs);
     }
 
     this.messages = Object.assign(latestMessages);
-    console.log(true);
+    console.log(latestMessages);
 
   }
 
@@ -85,6 +86,8 @@ export class ChatPage implements OnInit {
 
     messages = Object.assign([], bufferArray);
     messages = this.sortMessagesByDate(messages);
+
+    console.log(messages);
 
     return messages;
   }
