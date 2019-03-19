@@ -81,6 +81,10 @@ export class RemoveUserFromGroupUsersPage implements OnInit {
     await this.navCtrl.navigateForward('/home');
   }
 
+  async navigateToRemoveUserFromGroupPage() {
+    await this.navCtrl.navigateBack("/remove-user-from-group");
+  }
+
   async presentToast(message: string) {
     const toast = await this.toastController.create({
       message: message,

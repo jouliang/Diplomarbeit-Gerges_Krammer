@@ -6,12 +6,12 @@
 
 <ion-content padding>
   <ion-item>
-    <ion-input [(ngModel)]="username" placeholder="Benutzername"></ion-input>
+    <ion-input type="text" [(ngModel)]="username" placeholder="Benutzername"></ion-input>
   </ion-item>
   <ion-item>
     <ion-input [(ngModel)]="password" type="password" placeholder="Passwort"></ion-input>
   </ion-item>
   <br>
-  <ion-button expand="block" (click)="login()">Einloggen</ion-button>
-  <ion-button expand="block" (click)="register()">Registrieren</ion-button>
+  <ion-button id="login" expand="block" (click)="login()">Einloggen</ion-button>
+  <ion-button id="register" expand="block" (click)="register()">Registrieren</ion-button>
 </ion-content>
