@@ -18,7 +18,7 @@ export class LoginPage implements OnInit {
   constructor(private http: HTTP, public navCtrl: NavController,
     public setup: MySetupProvider, public menuCtrl: MenuController,
     private myNavService: MyNavService, public toastController: ToastController) {
-    setup.ip = "10.0.0.2:8080";
+    setup.ip = "192.168.195.58:8080";
   }
 
   ionViewWillEnter() {
