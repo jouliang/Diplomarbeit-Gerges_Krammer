@@ -11,7 +11,7 @@
   <p>Sind Sie sicher, dass Sie Ihren Account löschen wollen?<br>Ihre Daten werden gelöscht und Sie automatisch
     ausgeloggt!</p>
   <ion-item>
-    <ion-input [(ngModel)]="password" type="password" placeholder="Passwort"></ion-input>
+    <ion-input id="passwordToDelete" [(ngModel)]="password" type="password" placeholder="Passwort"></ion-input>
   </ion-item>
-  <ion-button expand="block" (click)="navigateToLoginPage()">Löschen</ion-button>
+  <ion-button id="deleteAccount" expand="block" (click)="navigateToLoginPage()">Löschen</ion-button>
 </ion-content>

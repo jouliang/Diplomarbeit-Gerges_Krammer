@@ -5,10 +5,8 @@ package app;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 /**
@@ -18,12 +16,22 @@ public class App {
 	final static String USERNAME = "koko";
 	final static String NEWUSERNAME = "neuerkoko";
 	final static String PASSWORD = "koko2";
+	final static String NEWPASSWORD = "koko1";
 	final static String GROUPNAME = "HTL-Informatik";
 	// GROUPMEMEBER stands for the user, who you can add to a group or remove from a
 	// group
 	final static String GROUPMEMBER = "test";
 
-	final static String LBLUSERNAME = "username";
+	final static String INPUTLOGINUSERNAME = "loginUsername";
+	final static String INPUTLOGINPASSWORD = "loginPassword";
+	
+	final static String INPUTUSERNAME = "username";
+	final static String INPUTOLDPASSWORD = "oldPassword";
+	final static String INPUTNEWPASSWORD = "newPassword";
+	final static String INPUTCONFIRMPASSWORD = "confirmPassword";
+	final static String INPUTPASSWORDTODELETE = "passwordToDelete";
+	
+	
 	final static String BTNLOGIN = "login";
 	final static String BTNBACK = "back";
 	final static String BTNNAVIGATETONEWGROUP = "navigatToNewGroup";
@@ -34,7 +42,10 @@ public class App {
 	final static String BTNNAVIGATEUPDATEUSERNAMEPAGE = "navigateUpdateUsernamePage";
 	final static String BTNUPDATEUSERNAME = "updateUsername";
 	final static String BTNNAVIGATEUPDATEPASSWORDPAGE = "navigateUpdatePasswordPage";
-
+	final static String BTNCHANGEPASSWORD = "changePassword";
+	final static String BTNDELETEACCOUNT = "deleteAccount";
+	final static String BTNNAVIGATEDELETEACCOUNT = "navigateDeleteAccountPage";
+	
 	final static String MENUNEWGROUP = "Neue Gruppe";
 	final static String MENUADDUSERTOGROUP = "User zu Gruppe hinzufügen";
 	final static String MENUDElETEUSERFROMGROUP = "User aus Gruppe löschen";
@@ -63,7 +74,7 @@ public class App {
 		driver.get(corsUrl);
 
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
@@ -72,7 +83,8 @@ public class App {
 		driver.manage().window().maximize();
 
 		try {
-			doLogin(driver);
+			doRegister(driver);
+			doLogin(driver, "", "");
 			goToChat(driver);
 			goBack(driver);
 			addNewGroup(driver);
@@ -82,11 +94,29 @@ public class App {
 			changeUsername(driver);
 			goToSettings(driver);
 			changePassword(driver);
+			doLogout(driver);
+			doLogin(driver, App.NEWUSERNAME, App.NEWPASSWORD);
+			goToSettings(driver);
+			deleteUser(driver);
 			// scrollDown(driver);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * This method registers a new user
+	 * 
+	 * @param driver
+	 * @throws InterruptedException
+	 */
+	public static void doRegister(WebDriver driver) throws InterruptedException {
+		driver.findElement(By.xpath("//ion-input[@id='" + App.INPUTLOGINUSERNAME + "']/input")).sendKeys(App.USERNAME);
+		driver.findElement(By.xpath("//ion-input[@id='" + App.INPUTLOGINPASSWORD + "']/input")).sendKeys(App.PASSWORD);
+
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//ion-button[@id='register']")).click();
+		Thread.sleep(2000);
 	}
 
 	/**
@@ -95,15 +125,14 @@ public class App {
 	 * @param driver
 	 * @throws InterruptedException
 	 */
-	public static void doLogin(WebDriver driver) throws InterruptedException {
-		driver.findElement(By.name("ion-input-0")).sendKeys(App.USERNAME);
-		driver.findElement(By.name("ion-input-1")).sendKeys(App.PASSWORD);
+	public static void doLogin(WebDriver driver, String username, String password) throws InterruptedException {
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//ion-input[@id='" + App.INPUTLOGINUSERNAME + "']/input")).sendKeys(username);
+		driver.findElement(By.xpath("//ion-input[@id='" + App.INPUTLOGINPASSWORD + "']/input")).sendKeys(password);
 
 		Thread.sleep(2000);
 
-		Actions actions = new Actions(driver);
-		WebElement element = driver.findElement(By.xpath("//ion-button[@id='" + BTNLOGIN + "']"));
-		actions.moveToElement(element).click().build().perform();
+		driver.findElement(By.xpath("//ion-button[@id='" + BTNLOGIN + "']")).click();
 	}
 
 	/**
@@ -164,7 +193,7 @@ public class App {
 		driver.findElement(By.xpath("//ion-label[contains(.,'" + MENUADDUSERTOGROUP + "')]")).click();
 		Thread.sleep(2000);
 		driver.findElement(By.xpath("//ion-label[contains(.,'" + App.GROUPMEMBER + " [false]')]")).click();
-		driver.findElement(By.xpath("//ion-list[2]/ion-item[2]/ion-label")).click();
+		driver.findElement(By.xpath("//ion-label[contains(.,'" + GROUPNAME + " [false]')]")).click();
 		driver.findElement(By.xpath("//ion-button[@id='" + BTNADDUSERTOGROUP + "']")).click();
 	}
 
@@ -207,7 +236,7 @@ public class App {
 		Thread.sleep(2000);
 		driver.findElement(By.xpath("//ion-button[@id='" + BTNNAVIGATEUPDATEUSERNAMEPAGE + "']")).click();
 		Thread.sleep(2000);
-		driver.findElement(By.xpath("//ion-input[@id='" + LBLUSERNAME + "']/input")).sendKeys(NEWUSERNAME);
+		driver.findElement(By.xpath("//ion-input[@id='" + INPUTUSERNAME + "']/input")).sendKeys(NEWUSERNAME);
 		driver.findElement(By.xpath("//ion-button[@id='" + BTNUPDATEUSERNAME + "']")).click();
 	}
 
@@ -220,10 +249,33 @@ public class App {
 	public static void changePassword(WebDriver driver) throws InterruptedException {
 		Thread.sleep(2000);
 		driver.findElement(By.xpath("//ion-button[@id='" + BTNNAVIGATEUPDATEPASSWORDPAGE + "']")).click();
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//ion-input[@id='" + App.INPUTOLDPASSWORD + "']/input")).sendKeys(App.PASSWORD);
+		driver.findElement(By.xpath("//ion-input[@id='" + App.INPUTNEWPASSWORD + "']/input")).sendKeys(App.NEWPASSWORD);
+		driver.findElement(By.xpath("//ion-input[@id='" + App.INPUTCONFIRMPASSWORD + "']/input")).sendKeys(App.NEWPASSWORD);
+		driver.findElement(By.xpath("//ion-button[@id='" + App.BTNCHANGEPASSWORD + "']")).click();
+	}
+
+	public static void deleteUser(WebDriver driver) throws InterruptedException {
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//ion-button[@id='" + App.BTNNAVIGATEDELETEACCOUNT + "']")).click();
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//ion-input[@id='" + App.INPUTPASSWORDTODELETE + "']/input")).sendKeys(App.NEWPASSWORD);
+		driver.findElement(By.xpath("//ion-button[@id='" + App.BTNDELETEACCOUNT + "']")).click();
+	}
+	
+	/**
+	 * This function does a logout
+	 * @param driver
+	 * @throws InterruptedException
+	 */
+	public static void doLogout(WebDriver driver) throws InterruptedException {
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//ion-label[contains(.,'Logout')]")).click();
 	}
 
 	/**
-	 * This metho scrolls down the page
+	 * This method scrolls down the page
 	 * 
 	 * @param driver
 	 * @throws InterruptedException
